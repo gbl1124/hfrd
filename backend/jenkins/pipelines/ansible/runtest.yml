@@ -24,6 +24,12 @@
     msg: "The operation {{ testitem.operation }} is not supported"
   when: hfrdops[opname] is not defined
 
+- name: Add hostAliases ant parameters to the command
+  set_fact:
+    hostAliases: "{{['--'+item.key,complex_params_string] }}"
+  when: " item.key == 'hostAliases' "
+  with_dict: "{{ testitem.parameters }}"
+
 - name: Setup container command params
   set_fact:
     cmd_params: "{{ [] + hfrdops[opname].cmd }}"

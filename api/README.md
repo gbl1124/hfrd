@@ -37,7 +37,7 @@ api server should work on MacOS and Linux
 To run the golang api server, clone this project under
 &lt;somedir&gt;/src,
 
-        git clone https://github.com/litong01/hfrd
+        git clone https://github.com/gbl1124/hfrd
 
 then include &lt;somedir&gt; in your GOPATH
 environment, then change directory to hfrd

@@ -13,6 +13,7 @@ spec:
 {% else %}
             claimName: storage-{{ metricserviceid | default(req_id) }}
 {% endif %}
+      - hostAliases: {{ hostAliases }}
 {% if testitem.container is defined %}
       initContainers:
       - name: init-{{ req_id }}-{{ my_idx }}

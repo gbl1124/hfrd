@@ -1,6 +1,6 @@
 # Test Runtime Container
 #
-# See: https://github.com/litong01/fabric-pilot
+# See: https://github.com/gbl1124/fabric-pilot
 #
 FROM ubuntu:bionic
 

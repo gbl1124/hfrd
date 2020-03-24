@@ -1,7 +1,7 @@
 FROM alpine/git AS BUILD
 
 RUN cd /tmp && git init hfrd && cd hfrd                            && \
-    git remote add origin https://github.com/litong01/hfrd.git     && \
+    git remote add origin https://github.com/gbl1124/hfrd.git     && \
     git config core.sparsecheckout true                            && \
     echo "docker/certgen/*" >> .git/info/sparse-checkout        && \
     git pull --depth=1 origin master

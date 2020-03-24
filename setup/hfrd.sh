@@ -15,7 +15,7 @@ if [[ $(uname -m) == 's390x' ]]; then
 else
     IMAGE_ARCH=''
     HTTPD_IMAGE_NAME='httpd:2.4.34-alpine'
-    COUCHDB_IMAGE_NAME='couchdb'
+    COUCHDB_IMAGE_NAME='couchdb:2.3'
 fi
 
 rootdir=~/hfrd
@@ -179,7 +179,7 @@ endmsg
     docker run -d --rm --name hfrdserver \
       -v $rootdir/contentRepo:/opt/hfrd/contentRepo \
       -v $rootdir/var:/opt/hfrd/var \
-      -p 9090:8080 hfrd/server:latest
+      -p 9090:8080 hfrd/server:amd64-latest
 
     echo "API server http://${PUBLIC_IP}:9090"
     echo "Jenkins server http://${PUBLIC_IP}:8080"
