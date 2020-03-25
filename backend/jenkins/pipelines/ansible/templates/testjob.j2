@@ -15,16 +15,16 @@ spec:
 {% endif %}
 {% if testitem.hostaliases is defined %}
       hostAliases:
-        - ip: {{ hostip }}
+        - ip: {{  testitem.hostaliases.ip }}
           hostnames:
 {% if testitem.hostaliases.hostname1 is defined %}
-           - "{{ hostname1 }}"
+           - "{{ testitem.hostaliases.hostname1 }}"
 {% endif %}
 {% if testitem.hostaliases.hostname2 is defined %}
-           - "{{ hostname2 }}"
+           - "{{ testitem.hostaliases.hostname2 }}"
 {% endif %}
 {% if testitem.hostaliases.hostname3 is defined %}
-           - "{{ hostname3 }}"
+           - "{{ testitem.hostaliases.hostname3 }}"
 {% endif %}
 {% endif %}
 {% if testitem.container is defined %}

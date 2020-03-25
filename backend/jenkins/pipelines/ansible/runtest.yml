@@ -24,30 +24,6 @@
     msg: "The operation {{ testitem.operation }} is not supported"
   when: hfrdops[opname] is not defined
 
-- name: get ip address
-  set_fact:
-    hostip: "{{ item.value }}"
-  when: " item.key == 'ip'" and testitem.hostaliases.ip is defined
-  with_dict: "{{ testitem.hostaliases }}"
-
-- name: get hostname1
-  set_fact:
-    hostname1: "{{ item.value }}"
-  when: " item.key == 'hostname1'" and testitem.hostaliases.hostname1 is defined
-  with_dict: "{{ testitem.hostaliases }}"
-
-- name: get hostname2
-  set_fact:
-    hostname2: "{{ item.value }}"
-  when: " item.key == 'hostname2'"
-  with_dict: "{{ testitem.hostaliases }}" and testitem.hostaliases.hostname2 is defined
-
-- name: get hostname3
-  set_fact:
-    hostname3: "{{ item.value }}"
-  when: " item.key == 'hostname3'" and testitem.hostaliases.hostname3 is defined
-  with_dict: "{{ testitem.hostaliases }}"
-
 - name: Setup container command params
   set_fact:
     cmd_params: "{{ [] + hfrdops[opname].cmd }}"
