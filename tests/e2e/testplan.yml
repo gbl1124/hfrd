@@ -86,18 +86,17 @@ tests:
     iterationInterval: 2r
     retryCount: 3
     loadSpread: 1
-    hostAliases:
-      - ip: "9.12.44.56"
-        hostnames:
-          - "hfrd-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
-          - "hfrd-orderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
-          - "hfrd-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+    hostaliases:
+      ip: "9.12.44.56"
+      hostname1: "hfrd-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "hfrd-orderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname3: "hfrd-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: /fabric/keyfiles/org1msp/connection.yml
       channelName: "channel1"
       chaincodeName: "samplecc"
       queryOnly: false
-      peers: "org1-peer1"
+      peers: "hfrd-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
       chaincodeParams:
         - type: "literal"
           value: "invoke"
