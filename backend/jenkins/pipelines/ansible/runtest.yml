@@ -24,11 +24,29 @@
     msg: "The operation {{ testitem.operation }} is not supported"
   when: hfrdops[opname] is not defined
 
-- name: Add hostAliases ant parameters to the command
+- name: get ip address
   set_fact:
-    hostAliases: "{{['--'+item.key,complex_params_string] }}"
-  when: " item.key == 'hostAliases' "
-  with_dict: "{{ testitem.parameters }}"
+    hostip: "{{ item.value }}"
+  when: " item.key == 'ip'"
+  with_dict: "{{ testitem.hostaliases }}"
+
+- name: get hostname1
+  set_fact:
+    hostname1: "{{ item.value }}"
+  when: " item.key == 'hostname1'"
+  with_dict: "{{ testitem.hostaliases }}"
+
+- name: get hostname2
+  set_fact:
+    hostname2: "{{ item.value }}"
+  when: " item.key == 'hostname2'"
+  with_dict: "{{ testitem.hostaliases }}"
+
+- name: get hostname3
+  set_fact:
+    hostname3: "{{ item.value }}"
+  when: " item.key == 'hostname3'"
+  with_dict: "{{ testitem.hostaliases }}"
 
 - name: Setup container command params
   set_fact:
