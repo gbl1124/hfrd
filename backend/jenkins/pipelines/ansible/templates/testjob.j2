@@ -17,9 +17,15 @@ spec:
       hostAliases:
         - ip: {{ hostip }}
           hostnames:
+{% if testitem.hostaliases.hostname1 is defined %}
            - "{{ hostname1 }}"
+{% endif %}
+{% if testitem.hostaliases.hostname2 is defined %}
            - "{{ hostname2 }}"
+{% endif %}
+{% if testitem.hostaliases.hostname3 is defined %}
            - "{{ hostname3 }}"
+{% endif %}
 {% endif %}
 {% if testitem.container is defined %}
       initContainers:
