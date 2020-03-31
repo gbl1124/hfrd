@@ -14,7 +14,7 @@ import (
 )
 
 func IbpNetworkPost(c *gin.Context) {
-	thisLogger.Debugf("Start the Ibp Network creation process")
+	thisLogger.Debugf("Start the IBP V2 Network creation process")
 	uid := c.Param("uid")
 	reqId := uuid.New().String()[0:8] + "-i"
 	rootPath := utils.GetValue("contentRepo").(string) + "/" + uid + "/" + reqId
@@ -34,7 +34,7 @@ func IbpNetworkPost(c *gin.Context) {
 
 	var params = map[string]string{jenkins.REQUESTID: reqId, jenkins.UID: uid, jenkins.METHOD: jenkins.POST}
 	thisLogger.Debug(utils.PrettyMapString(params))
-	queueid, err := jks.TriggerJob(jenkins.NETWORK_Ibp, params)
+	queueid, err := jks.TriggerJob(jenkins.NETWORK_IBP, params)
 	if err != nil {
 		c.String(http.StatusServiceUnavailable, err.Error())
 		return
