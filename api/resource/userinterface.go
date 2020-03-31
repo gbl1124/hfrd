@@ -56,6 +56,11 @@ func IbpUI(c *gin.Context) {
 	c.HTML(http.StatusOK, "ibpUI.html", gin.H{"uid": uid, "jenkinsBase": baseUrl, "apacheBase": apacheBase})
 }
 
+func Ibpv2UI(c *gin.Context) {
+	uid := c.Param("uid")
+	c.HTML(http.StatusOK, "ibpv2UI.html", gin.H{"uid": uid, "jenkinsBase": baseUrl, "apacheBase": apacheBase})
+}
+
 func IcpUI(c *gin.Context) {
 	nets, err := GetList(c, "*-i")
 	if err != nil {
