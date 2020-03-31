@@ -4,7 +4,7 @@
     <link href="/static/css/index.css" type="text/css" rel="stylesheet" />
     <script src="/static/js/jquery-3.3.1.min.js"></script>
     <script src="/static/js/bluemix-components.js"></script>
-    <script src="/static/js/ibp.js"></script>
+    <script src="/static/js/ibpv2.js"></script>
     <script>
         var uid = "{{ .uid }}"
         $(document).ready(function () {
@@ -23,7 +23,7 @@
         <div class="bx--row">
             <div class="bx--col-xs-6 bx--col-md-4">
                 <div style="padding: 20px" class="thestyle">
-                    <form id="netform" action="/v1/{{ .uid }}/ibpnet" method="post" enctype="multipart/form-data">
+                    <form id="netform" action="/v1/{{ .uid }}/ibpnetv2" method="post" enctype="multipart/form-data">
                         <div class="bx--form-item">
                             <strong class="bx--label">ICP network spec yaml file</strong>
                             <div class="bx--file" data-file>
