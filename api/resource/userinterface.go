@@ -57,12 +57,18 @@ func IbpUI(c *gin.Context) {
 }
 
 func Ibpv2UI(c *gin.Context) {
-	uid := c.Param("uid")
-	c.HTML(http.StatusOK, "ibpv2UI.html", gin.H{"uid": uid, "jenkinsBase": baseUrl, "apacheBase": apacheBase})
+	nets, err := GetList(c, "*-ib")
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+	c.HTML(http.StatusOK, "ibpv2UI.html",
+		gin.H{"uid": c.Param("uid"), "nets": nets,
+			"baseUrl": baseUrl})
 }
 
 func IcpUI(c *gin.Context) {
-	nets, err := GetList(c, "*-i")
+	nets, err := GetList(c, "*-ic")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
 		return
