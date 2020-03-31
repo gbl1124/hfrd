@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func IbpNetworkPost(c *gin.Context) {
+func Ibpv2NetworkPost(c *gin.Context) {
 	thisLogger.Debugf("Start the IBP V2 Network creation process")
 	uid := c.Param("uid")
 	reqId := uuid.New().String()[0:8] + "-i"
@@ -46,7 +46,7 @@ func IbpNetworkPost(c *gin.Context) {
 			"jobName": jenkins.NETWORK_IBP})
 }
 
-func IbpNetworkGet(c *gin.Context) {
+func Ibpv2NetworkGet(c *gin.Context) {
 	nets, err := GetItems(c, "*-i")
 	if err != nil {
 		c.JSON(http.StatusServiceUnavailable, gin.H{})
@@ -54,7 +54,7 @@ func IbpNetworkGet(c *gin.Context) {
 	c.JSON(http.StatusOK, nets)
 }
 
-func IbpNetworkDelete(c *gin.Context) {
+func Ibpv2NetworkDelete(c *gin.Context) {
 	thisLogger.Debugf("Start the Network deletion process")
 	uid := c.Param("uid")
 	reqId := c.Query("requestid")

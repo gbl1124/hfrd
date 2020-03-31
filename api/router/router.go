@@ -79,6 +79,7 @@ func Router(logger bool) *gin.Engine {
 		ui.GET("/network", res.NetworkUI)
 		ui.GET("/moduletest", res.ModuleTestUI)
 		ui.GET("/ibp", res.IbpUI)
+		ui.GET("/ibpv2", res.Ibpv2UI)
 		ui.GET("/icp", res.IcpUI)
 		ui.GET("/ibpcerts", res.IbpCerts)
 	}
@@ -88,6 +89,14 @@ func Router(logger bool) *gin.Engine {
 		network.POST("", res.NetworkPost)
 		network.GET("", res.NetworkGet)
 		network.DELETE("", filter.CheckReqId, res.NetworkDelete)
+	}
+
+	// APIs for ibpv2 network management
+	ibpv2Network := router.Group("/v1/:uid/ibpnetv2", filter.CheckUid, authInstance.Handler())
+	{
+		ibpv2Network.POST("", res.Ibpv2NetworkPost)
+		ibpv2Network.GET("", res.Ibpv2NetworkGet)
+		ibpv2Network.DELETE("", filter.CheckReqId, res.Ibpv2NetworkDelete)
 	}
 
 	// APIs for icp network management
