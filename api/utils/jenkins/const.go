@@ -6,6 +6,7 @@ const (
 	CONNECTION    = "connection"
 	TEST          = "test"
 	NETWORK_ICP   = "network-icp"
+	NETWORK_IBP   = "network-ibp"
 	NETWORK_CM    = "network-cm"
 	CONNECTION_CM = "connection-cm"
 	K8SNETWORK    = "k8snetwork"

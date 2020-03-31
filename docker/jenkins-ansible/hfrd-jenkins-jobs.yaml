@@ -198,7 +198,29 @@
           uid: ''
       - contentrepo-parameter:
           contentrepo: '/opt/hfrd/contentRepo'
-
+- job-template:
+    name: network-ibp
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/network-ibp.jks
+      lightweight-checkout: true
+      scm:
+        - git:
+            url: 'https://github.com/gbl1124/hfrd.git'
+            clean:
+              before: true
+            branches:
+              - '*/master'
+    parameters:
+      - method-parameter:
+          method: ''
+      - requestid-parameter:
+          requestid: ''
+      - uid-parameter:
+          uid: ''
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
 - job-template:
     name: k8snetwork
     project-type: pipeline

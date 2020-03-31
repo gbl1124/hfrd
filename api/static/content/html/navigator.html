@@ -31,6 +31,7 @@
             console.log('user id:', uid)
             $('#nav_ibp').attr('href', '/v1/' + uid + '/ui/ibp')
             $('#nav_icp').attr('href', '/v1/' + uid + '/ui/icp')
+            $('#nav_ibpv2').attr('href', '/v1/' + uid + '/ui/ibpv2')
             $('#nav_k8s').attr('href', '/v1/' + uid + '/ui/network')
             $('#nav_tests').attr('href', '/v1/' + uid + '/ui/moduletest')
             $('#nav_ibpcerts').attr('href', '/v1/' + uid + '/ui/ibpcerts')
@@ -40,6 +41,8 @@
         if (link.endsWith('/ui/ibp')) {
             $('#nav_ibp').addClass('active')
         } else if (link.endsWith('/ui/icp')) {
+            $('#nav_icp').addClass('active')
+        } else if (link.endsWith('/ui/ibpv2')) {
             $('#nav_icp').addClass('active')
         } else if (link.endsWith('/ui/network')) {
             $('#nav_k8s').addClass('active')
@@ -55,6 +58,7 @@
         <li><a href="/">Home</a></li>
         <li><a id="nav_k8s" href="#">Fabric on k8s</a></li>
         <li><a id="nav_ibp" href="#">Fabric on IBP</a></li>
+        <li><a id="nav_ibpv2" href="#">Fabric on IBPV2</a></li>
         <li><a id="nav_icp" href="#">Fabric on ICP</a></li>
         <li><a id="nav_tests" href="#">Manage test</a></li>
         <li><a id="nav_ibpcerts" href="#">Get certs from existing IBP</a></li>
