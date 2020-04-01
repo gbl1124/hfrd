@@ -21,17 +21,6 @@ if [ ! -d $work_dir'/bin/' ]; then
     tar zxf fabric.tar.gz
 fi
 
-if [ ! -f $work_dir'/bin/cloudctl' ]; then
-
-  curl -kLo cloudctl-linux-amd64-v3.2.0-634 https://$icp_url/api/cli/cloudctl-linux-amd64
-  mv cloudctl* $work_dir'/bin/cloudctl'
-  chmod +x $work_dir'/bin/cloudctl'
-
-  curl -kLo kubectl-linux-amd64-v1.13.5 https://$icp_url/api/cli/kubectl-linux-amd64
-  mv kubectl* $work_dir'/bin/kubectl'
-  chmod +x $work_dir'/bin/kubectl'
-fi
-
 export PATH=$PATH:$work_dir/bin
 
 cloudctl login -a https://$icp_url --skip-ssl-validation -u $icp_user -p $icp_password -n $icp_namespace

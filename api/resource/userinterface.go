@@ -57,7 +57,7 @@ func IbpUI(c *gin.Context) {
 }
 
 func Ibpv2UI(c *gin.Context) {
-	nets, err := GetList(c, "*-ib")
+	nets, err := GetList(c, "*-i")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
 		return
@@ -68,7 +68,7 @@ func Ibpv2UI(c *gin.Context) {
 }
 
 func IcpUI(c *gin.Context) {
-	nets, err := GetList(c, "*-ic")
+	nets, err := GetList(c, "*-i")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
 		return
