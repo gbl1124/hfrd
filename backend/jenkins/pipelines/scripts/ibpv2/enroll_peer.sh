@@ -18,13 +18,10 @@ TLS_CA_NAME=$(jq -r .tlsca_name $work_dir/crypto-config/${org_name}/${ca_name}.j
 
 if [ ! -d $work_dir'/bin/' ]; then
     curl -f -s -C - ${binary_url} -o fabric.tar.gz
-    tar zxf fabric.tar.gz
+    tar -xzvf fabric.tar.gz
 fi
 
 export PATH=$PATH:$work_dir/bin
-
-cloudctl login -a https://$icp_url --skip-ssl-validation -u $icp_user -p $icp_password -n $icp_namespace
-
 
 BASE_FOLDER=$work_dir'/crypto-config'
 
