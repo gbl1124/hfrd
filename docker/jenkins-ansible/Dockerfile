@@ -5,20 +5,24 @@ ADD https://storage.googleapis.com/kubernetes-release/release/v1.11.2/bin/linux/
 ADD plugins.txt /usr/share/jenkins/ref/plugins.txt
 ADD jenkins.ini /usr/share/hfrd/jenkins.ini
 ADD hfrd-jenkins-jobs.yaml /usr/share/hfrd/jjb/hfrd-jenkins-jobs.yaml
-RUN apt-get update && apt-get install -y bash                                  && \
-    apt-get install -y python-pip openssh-client sudo apt-transport-https         \
-    ca-certificates curl software-properties-common                            && \
-    pip install --upgrade pip ansible pyyaml jenkins-job-builder               && \
-    chmod +x /usr/local/bin/kubectl                                            && \
-    chown jenkins:jenkins /usr/share/jenkins/ref/plugins.txt                   && \
-    /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt     && \
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -    && \
-    add-apt-repository                                                            \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"  && \
-    apt-get update -qq && apt-get install -qqy docker-ce                       && \
-    usermod -a -G docker jenkins                                               && \
-    echo 'jenkins ALL=(ALL) NOPASSWD: ALL' >f> /etc/sudoers.d/jenkins           && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade
+RUN apt-get install -y bash
+RUN apt-get install -y python-pip openssh-client sudo apt-transport-https         \
+    ca-certificates curl software-properties-common
+RUN pip install --upgrade pip ansible pyyaml jenkins-job-builder
+RUN chmod +x /usr/local/bin/kubectl
+RUN chown jenkins:jenkins /usr/share/jenkins/ref/plugins.txt
+RUN  /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+RUN    add-apt-repository                                                            \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+RUN    apt-get update -qq
+RUN   curl -O https://download.docker.com/linux/ubuntu/dists/bionic/pool/edge/amd64/containerd.io_1.2.2-3_amd64.deb
+RUN   sudo apt install ./containerd.io_1.2.2-3_amd64.deb
+RUN    apt-get install -qqy docker-ce
+RUN    usermod -a -G docker jenkins
+RUN    echo 'jenkins ALL=(ALL) NOPASSWD: ALL' >f> /etc/sudoers.d/jenkins
+RUN    rm -rf /var/lib/apt/lists/*
 
 VOLUME /var/lib/docker
 USER jenkins
