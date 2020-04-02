@@ -16,7 +16,7 @@ TLS_CA_NAME=$(jq -r .tlsca_name $work_dir/crypto-config/${org_name}/${ca_name}.j
 
 if [ ! -d $work_dir'/bin/' ]; then
     curl -f -s -C - ${binary_url} -o fabric.tar.gz
-    tar -xzvf fabric.tar.gz
+    tar -zxvf fabric.tar.gz
 fi
 
 export PATH=$PATH:$work_dir/bin
