@@ -11,7 +11,7 @@
             setTimeout(updateNet, 50, uid)
             $("#net").click(function (event) {
                 multipartformpost("netform", "net",
-                    "/v1/{{ .uid }}/icpnet", event)
+                    "/v1/{{ .uid }}/ibpnetv2", event)
             })
         });
     </script>
@@ -84,7 +84,7 @@
                                 </td>
                                 <td>
                                     <button type="submit" class="bx--btn bx--btn--danger"
-                                        onclick="senddelete('/v1/{{ $.uid }}/ibpnet?requestid={{ . }}');return false;">Delete</button>
+                                        onclick="senddelete('/v1/{{ $.uid }}/ibpnetv2?requestid={{ . }}');return false;">Delete</button>
                                 </td>
                             </tr>
                             {{ end}}

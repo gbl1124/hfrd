@@ -5,7 +5,7 @@ function updateNet(uid) {
                 $('#n1' + item.id).attr("href", json.apachebase + "/" + uid + "/" + item.id)
                 $('#n2' + item.id).text(item.status);
                 if (item.jobid != "") {
-                    $('#n3' + item.id).attr("href", json.consolebase + "/job/network-icp/" + item.jobid + "/console")
+                    $('#n3' + item.id).attr("href", json.consolebase + "/job/network-ibp/" + item.jobid + "/console")
                 }
                 $('#n4' + item.id).text(item.cdate)
             })
