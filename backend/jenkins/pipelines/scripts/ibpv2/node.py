@@ -29,6 +29,11 @@ def query_ca(org_name, config):
                 json.dump(component, outfile)
             break
 
+def query_componets(config):
+    all_components = requests.get(config.get('Initiate', 'Console_Url') + config.get('Components', 'All_Components'),
+                                  auth=(config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret')), verify=False).json()
+    return  all_components
+
 def create_msp(org_name, node_type ,config,networkspec):
     work_dir = config.get('Initiate', 'Work_Dir')
     binary_url = networkspec['repo']['bin']

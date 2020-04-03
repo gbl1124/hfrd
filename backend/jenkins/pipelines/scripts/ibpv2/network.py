@@ -95,8 +95,9 @@ if action == 'POST':
             print 'error found when update system channel '
             sys.exit(1)
     # Generate certs package
+    componets = node.query_componets(config)
     generateCerts.generateCertificatesPackage(networkspec)
-    generateCerts.generateConnectionProfiles(networkspec)
+    generateCerts.generateConnectionProfiles(networkspec,componets)
     os.system('cp -rf crypto-config keyfiles')
     os.system('tar -zcf ibpcerts.tgz keyfiles/ && mv ibpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
 elif action == 'DELETE':

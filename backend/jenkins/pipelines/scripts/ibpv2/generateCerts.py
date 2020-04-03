@@ -20,20 +20,33 @@ def loadJsonContent(jsonFile):
     f.close()
     return temtplateDict
 
+def serachurl(componets,orgName,peerName):
+    data = json.loads(componets.text.replace("\n", ""),encoding='utf-8')
+    for i in data:
+        print i['id']
+        print orgName
+        print peerName
+        if i['id'] == orgName + '-' + peerName:
+            apiurl = i['api_url']
+    return  apiurl
 
-def generatePeerSection(templateContent, peerName, orgName, proxyIp):
-    strCmd = "export PATH=$PATH:./bin; kubectl get svc " + peerName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $6}'"
-    templateContent['url'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
-    strCmd = "export PATH=$PATH:./bin; kubectl get svc " + peerName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $8}'"
-    templateContent['eventUrl'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
+
+def generatePeerSection(templateContent, peerName, orgName, proxyIp,componets):
+    #strCmd = "export PATH=$PATH:./bin; kubectl get svc " + peerName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $6}'"
+
+
+    templateContent['url'] = serachurl(componets,orgName,peerName)
+    #strCmd = "export PATH=$PATH:./bin; kubectl get svc " + peerName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $8}'"
+    #templateContent['eventUrl'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
     templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
     templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('orgname',orgName)
     return templateContent
 
 
-def generateOrdererSection(templateContent, ordererName, ordererorgName, proxyIp):
-    strCmd = "export PATH=$PATH:./bin ; kubectl get svc " + ordererName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $6}'"
-    templateContent['url'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
+def generateOrdererSection(templateContent, ordererName, ordererorgName, proxyIp,componets):
+    #strCmd = "export PATH=$PATH:./bin ; kubectl get svc " + ordererName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $6}'"
+    templateContent['url'] = serachurl(componets,ordererorgName,ordererName)
+    #templateContent['url'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
     templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
     templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('ordererorg', ordererorgName)
     return templateContent
@@ -47,7 +60,7 @@ def generateOrgSection(templateContent,orgName,peers,orgType):
                 templateContent['peers'].append(orgName + peer.split('.')[0])
     return templateContent
 
-def generateConnectionProfiles(networkspec):
+def generateConnectionProfiles(networkspec,componets):
     peerorg_names = []
     ordererorg_names = []
     peers = networkspec['network']['peers']
@@ -78,7 +91,7 @@ def generateConnectionProfiles(networkspec):
             peer_name = peer.split('.')[0]
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
-            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['ibp']['url'].split(':')[0])
+            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['ibp']['url'].split(':')[0],componets)
         # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
@@ -87,7 +100,7 @@ def generateConnectionProfiles(networkspec):
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
-                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, ordererorg_name, networkspec['ibp']['url'].split(':')[0])
+                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, ordererorg_name, networkspec['ibp']['url'].split(':')[0],componets)
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
