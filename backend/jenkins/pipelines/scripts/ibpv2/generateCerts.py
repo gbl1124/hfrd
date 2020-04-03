@@ -78,7 +78,7 @@ def generateConnectionProfiles(networkspec):
             peer_name = peer.split('.')[0]
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
-            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['icp']['url'].split(':')[0])
+            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['ibp']['url'].split(':')[0])
         # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
@@ -87,7 +87,7 @@ def generateConnectionProfiles(networkspec):
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
-                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, ordererorg_name, networkspec['icp']['url'].split(':')[0])
+                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, ordererorg_name, networkspec['ibp']['url'].split(':')[0])
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
@@ -99,7 +99,7 @@ def generateConnectionProfiles(networkspec):
         f.close()
 
 
-# certsPath = /opt/src/scripts/icp/keyfiles
+# certsPath = /opt/src/scripts/ibpv2/keyfiles
 def generateCertificatesPackage(networkspec):
     certsPath = networkspec['work_dir'] + '/crypto-config/'
     # restructure msp dir

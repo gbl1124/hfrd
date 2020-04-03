@@ -14,25 +14,25 @@ config.read('templates/apis_template.ini')
 with open('./networkspec.yml', 'r') as stream:
     networkspec = yaml.load(stream , Loader=yaml.FullLoader)
 
-icp = networkspec['icp']
-ibp4icp = icp['ibp4icp']
+ibp = networkspec['ibp']
+ibp4ibp = ibp['ibp4ibp']
 resources = networkspec['resources']
 network = networkspec['network']
 orderersettings = networkspec['orderersettings']
 
-url = ibp4icp['url'] + config.get('Initiate', 'Api_Key_URL')
-api_key, api_secret = utils.createApiKeySecret(url, ibp4icp['user'], ibp4icp['password'])
+url = ibp4ibp['url'] + config.get('Initiate', 'Api_Key_URL')
+api_key, api_secret = utils.createApiKeySecret(url, ibp4ibp['user'], ibp4ibp['password'])
 time.sleep(2)
 
-config['Initiate']['ICP_Url'] = icp['url']
-config['Initiate']['ICP_User'] = icp['user']
-config['Initiate']['ICP_Password'] = icp['password']
-config['Initiate']['ICP_Namespace'] = icp['namespace']
-config['Initiate']['ICP_Storageclass'] = icp['storageclass']
+config['Initiate']['IBP_Url'] = ibp['url']
+config['Initiate']['IBP_User'] = ibp['user']
+config['Initiate']['IBP_Password'] = ibp['password']
+config['Initiate']['IBP_Namespace'] = ibp['namespace']
+config['Initiate']['IBP_Storageclass'] = ibp['storageclass']
 
-config['Initiate']['Console_Url'] = ibp4icp['url']
-config['Initiate']['Manager_User'] = ibp4icp['user']
-config['Initiate']['Manager_Password'] = ibp4icp['password']
+config['Initiate']['Console_Url'] = ibp4ibp['url']
+config['Initiate']['Manager_User'] = ibp4ibp['user']
+config['Initiate']['Manager_Password'] = ibp4ibp['password']
 config['Initiate']['Api_Key'] = api_key
 config['Initiate']['Api_Secret'] = api_secret
 config['Initiate']['Work_Dir'] = networkspec['work_dir']
@@ -97,7 +97,7 @@ if action == 'create':
     generateCerts.generateCertificatesPackage(networkspec)
     generateCerts.generateConnectionProfiles(networkspec)
     os.system('cp -rf crypto-config keyfiles')
-    os.system('tar -zcf icpcerts.tgz keyfiles/ && mv icpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
+    os.system('tar -zcf ibpcerts.tgz keyfiles/ && mv ibpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
 elif action == 'delete':
     delete_all_url = config['Initiate']['Console_Url'] + config['Components']['delete_all_components']
     utils.sendDeleteRequest(delete_all_url, api_key, api_secret)

@@ -3,8 +3,8 @@ SECONDS=0
 
 while (( $SECONDS < 600 ));
 do
-    if (( $SECONDS >50 ));
-      echo "Waiting $SECONDS for pod ${NAME} to start completion.
+    if (( $SECONDS > 50 )); then
+      echo "Waiting $SECONDS for pod ${NAME} to start completion."
       break
     fi
     sleep 3
