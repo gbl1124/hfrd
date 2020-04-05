@@ -36,20 +36,22 @@ def searchfromcomponets(componets,name,item):
 def generatePeerSection(templateContent, peerName,componets):
     templateContent['url'] = searchfromcomponets(componets,peerName,'api_url')
     #templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
-    templateContent['tlsCACerts']['pem'] = searchfromcomponets(componets,peerName,'pem')
+    templateContent['tlsCACerts']['pem'] = searchfromcomponets(componets,peerName,'tls_cert')
     return templateContent
 
 
 def generateOrdererSection(templateContent, ordererName,componets):
     templateContent['url'] = searchfromcomponets(componets,ordererName,'api_url')
     #templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
-    templateContent['tlsCACerts']['pem'] = searchfromcomponets(componets,ordererName,'pem')
+
+    templateContent['tlsCACerts']['pem'] = searchfromcomponets(componets,ordererName,'tls_cert')
     return templateContent
 
 def generateOrgSection(templateContent,orgName,peers,orgType):
     templateContent['mspid'] = orgName
     templateContent['cryptoPath'] = templateContent['cryptoPath'].replace('orgname', orgName)
     if orgType == 'peerorg':
+        templateContent['certificateAuthorities'] = orgName + 'ca'
         for peer in peers:
             if peer.split('.')[1] == orgName:
                 templateContent['peers'].append(orgName + peer.split('.')[0])
@@ -96,6 +98,12 @@ def generateConnectionProfiles(networkspec,componets):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
                 connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets)
+
+        ca_template = loadJsonContent('./templates/ca_template.json')
+        ca_template['ca_Name'] = org + 'ca'
+        ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
+        ca_template['tlsCACerts']['pem'] = searchfromcomponets(componets, org + 'ca', 'tls_cert')
+        connection_template['certificateAuthorities'] = ['tlsCACerts']['pem'] = ca_template
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
