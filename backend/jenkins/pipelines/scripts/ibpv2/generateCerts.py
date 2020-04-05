@@ -21,15 +21,10 @@ def loadJsonContent(jsonFile):
     return temtplateDict
 
 def searchfromcomponets(componets,name,item):
-    data = json.loads(componets.replace("\n", "\\n"),encoding='utf-8')
     result =''
-    for i in data:
-        print '---------------------------'
-        print name
-        print i['id']
-        print '---------------------------'
-    if i['id'].replace("-","").replace("_","") == name:
-        result = i[item]
+    for componet in componets:
+        if componet['id'].replace("-","").replace("_","") == name:
+            result = componet[item]
     return  result
 
 
@@ -100,10 +95,10 @@ def generateConnectionProfiles(networkspec,componets):
                 connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets)
 
         ca_template = loadJsonContent('./templates/ca_template.json')
-        ca_template['ca_Name'] = org + 'ca'
+        ca_template['caName'] = org + 'ca'
         ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
         ca_template['tlsCACerts']['pem'] = searchfromcomponets(componets, org + 'ca', 'tls_cert')
-        connection_template['certificateAuthorities'] = ['tlsCACerts']['pem'] = ca_template
+        connection_template['certificateAuthorities'] = ca_template
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)

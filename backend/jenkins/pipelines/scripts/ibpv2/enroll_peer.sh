@@ -17,8 +17,9 @@ CA_NAME=$(jq -r .ca_name $work_dir/crypto-config/${org_name}/${ca_name}.json)
 TLS_CA_NAME=$(jq -r .tlsca_name $work_dir/crypto-config/${org_name}/${ca_name}.json)
 
 if [ ! -d $work_dir'/bin/' ]; then
-    curl -f -s -C - ${binary_url} -o fabric.tar.gz
-    tar -zxvf fabric.tar.gz
+    wget https://github.com/hyperledger/fabric/releases/download/v1.4.6/hyperledger-fabric-linux-amd64-1.4.6.tar.gz
+    tar -zxvf hyperledger-fabric-linux-amd64-1.4.6.tar.gz
+    rm hyperledger-fabric-linux-amd64-1.4.6.tar.gz
 fi
 
 export PATH=$PATH:$work_dir/bin

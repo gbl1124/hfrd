@@ -31,7 +31,7 @@ def query_ca(org_name, config):
 
 def query_componets(config):
     all_components = requests.get(config.get('Initiate', 'Console_Url') + config.get('Components', 'All_Components'),
-                                  auth=(config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret')), verify=False).text
+                                  auth=(config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret')), verify=False).json()
     return  all_components
 
 def create_msp(org_name, node_type ,config,networkspec):
@@ -109,4 +109,4 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
             config.get('Initiate', 'Api_Secret'))
 
     # Get orderer component
-    utils.getComponentByDisplayName(config, service_name, service_name + '-orderer-1', api_key, api_secret)
+    utils.getComponentByDisplayName(config, service_name, service_name + '-orderer_1', api_key, api_secret)

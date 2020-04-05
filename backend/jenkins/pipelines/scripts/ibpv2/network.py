@@ -90,14 +90,18 @@ if action == 'POST':
     ordererorg_names = list(set(ordererorg_names))
     peerorg_names = list(set(peerorg_names))
     peerorg_names_string = ','.join(peerorg_names)
+
+    print 'S T A R T    U P D A T E   C H A N N E L '
     for ordererorg_name in ordererorg_names:
         if subprocess.call([networkspec['work_dir'] + '/update_system_channel.sh', ordererorg_name,peerorg_names_string ] ) == 1:
             print 'error found when update system channel '
             sys.exit(1)
+    print 'E N D   U P D A T E   C H A N N E L '
     # Generate certs package
     componets = node.query_componets(config)
-    generateCerts.generateCertificatesPackage(networkspec)
+    #generateCerts.generateCertificatesPackage(networkspec)
     generateCerts.generateConnectionProfiles(networkspec,componets)
+    generateCerts.generateIdentityProfiles(networkspec,componets)
     os.system('cp -rf crypto-config keyfiles')
     os.system('tar -zcf ibpcerts.tgz keyfiles/ && mv ibpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
 elif action == 'DELETE':

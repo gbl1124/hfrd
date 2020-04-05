@@ -85,7 +85,7 @@ export CORE_PEER_LOCALMSPID=${ORDERER_ORG_NAME}
 export CORE_PEER_TLS_ROOTCERT_FILE=$ORDERER_TLS_CA
 export CORE_PEER_MSPCONFIGPATH=$work_dir/crypto-config/${ORDERER_ORG_NAME}/admin
 
-ORDERER_URL=$(jq -r .api_url $work_dir/crypto-config/${ORDERER_ORG_NAME}/${ORDERER_ORG_NAME}-orderer-1.json)
+ORDERER_URL=$(jq -r .api_url $work_dir/crypto-config/${ORDERER_ORG_NAME}/${ORDERER_ORG_NAME}-orderer_1.json)
 ORDERER_URL=${ORDERER_URL:8}
 echo -e "\n Orderer URL : ${ORDERER_URL}"
 
