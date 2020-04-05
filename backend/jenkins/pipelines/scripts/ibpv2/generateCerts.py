@@ -20,35 +20,30 @@ def loadJsonContent(jsonFile):
     f.close()
     return temtplateDict
 
-def serachurl(componets,orgName,peerName):
-    data = json.loads(componets.text.replace("\n", ""),encoding='utf-8')
+def searchfromcomponets(componets,name,item):
+    data = json.loads(componets.replace("\n", "\\n"),encoding='utf-8')
+    result =''
     for i in data:
+        print '---------------------------'
+        print name
         print i['id']
-        print orgName
-        print peerName
-        if i['id'] == orgName + '-' + peerName:
-            apiurl = i['api_url']
-    return  apiurl
+        print '---------------------------'
+    if i['id'].replace("-","").replace("_","") == name:
+        result = i[item]
+    return  result
 
 
-def generatePeerSection(templateContent, peerName, orgName, proxyIp,componets):
-    #strCmd = "export PATH=$PATH:./bin; kubectl get svc " + peerName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $6}'"
-
-
-    templateContent['url'] = serachurl(componets,orgName,peerName)
-    #strCmd = "export PATH=$PATH:./bin; kubectl get svc " + peerName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $8}'"
-    #templateContent['eventUrl'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
-    templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
-    templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('orgname',orgName)
+def generatePeerSection(templateContent, peerName,componets):
+    templateContent['url'] = searchfromcomponets(componets,peerName,'api_url')
+    #templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
+    templateContent['tlsCACerts']['pem'] = searchfromcomponets(componets,peerName,'pem')
     return templateContent
 
 
-def generateOrdererSection(templateContent, ordererName, ordererorgName, proxyIp,componets):
-    #strCmd = "export PATH=$PATH:./bin ; kubectl get svc " + ordererName + "-service | grep NodePort |  awk -F '[[:space:]:/]+' '{print $6}'"
-    templateContent['url'] = serachurl(componets,ordererorgName,ordererName)
-    #templateContent['url'] = 'grpcs://' + proxyIp + ':' + os.popen(strCmd).read().strip()
-    templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
-    templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('ordererorg', ordererorgName)
+def generateOrdererSection(templateContent, ordererName,componets):
+    templateContent['url'] = searchfromcomponets(componets,ordererName,'api_url')
+    #templateContent['grpcOptions']['ssl-target-name-override'] = proxyIp
+    templateContent['tlsCACerts']['pem'] = searchfromcomponets(componets,ordererName,'pem')
     return templateContent
 
 def generateOrgSection(templateContent,orgName,peers,orgType):
@@ -91,7 +86,7 @@ def generateConnectionProfiles(networkspec,componets):
             peer_name = peer.split('.')[0]
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
-            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['ibp']['url'].split(':')[0],componets)
+            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, componets)
         # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
@@ -100,7 +95,7 @@ def generateConnectionProfiles(networkspec,componets):
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
-                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, ordererorg_name, networkspec['ibp']['url'].split(':')[0],componets)
+                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets)
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
@@ -111,6 +106,25 @@ def generateConnectionProfiles(networkspec,componets):
             yaml.safe_dump(connection_template, f, allow_unicode=True)
         f.close()
 
+def generateIdentityProfiles(networkspec,componets):
+    peerorg_names = []
+    ordererorg_names = []
+    peers = networkspec['network']['peers']
+    for peer_object in peers:
+        peerorg_names.append(peer_object.split('.')[1])
+    peerorg_names = list(set(peerorg_names))
+
+    # generate collection profile for each peer organization
+    for org in peerorg_names:
+        identity_template = loadJsonContent('./templates/identity_template.json')
+        # Load client
+        identity_template['name'] = org
+        identity_template['private_key']= searchfromcomponets(componets,org,'admins')
+        identity_template['cert'] = searchfromcomponets(componets,org,'root_certs')
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/identity.json', 'w') as f:
+            print('\nWriting identity file for ' + str(org) + ' - ' + f.name)
+            json.dump(identity_template, f, indent=4)
+        f.close()
 
 # certsPath = /opt/src/scripts/ibpv2/keyfiles
 def generateCertificatesPackage(networkspec):

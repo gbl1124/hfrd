@@ -31,7 +31,7 @@ def query_ca(org_name, config):
 
 def query_componets(config):
     all_components = requests.get(config.get('Initiate', 'Console_Url') + config.get('Components', 'All_Components'),
-                                  auth=(config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret')), verify=False).json()
+                                  auth=(config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret')), verify=False).text
     return  all_components
 
 def create_msp(org_name, node_type ,config,networkspec):
