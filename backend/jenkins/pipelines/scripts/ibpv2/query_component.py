@@ -13,7 +13,7 @@ with open(networkspec_file, 'r') as stream:
     networkspec = yaml.load(stream , Loader=yaml.FullLoader)
 
 ibp4ibp = networkspec['ibp4ibp']
-resources = networkspec['resources']
+#resources = networkspec['resources']
 network = networkspec['network']
 raftsettings = networkspec['raftsettings']
 orderersettings = networkspec['orderersettings']

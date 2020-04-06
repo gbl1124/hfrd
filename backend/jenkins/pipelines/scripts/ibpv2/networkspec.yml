@@ -12,15 +12,6 @@ ibp:
     user: ""
     password: ""
 
-
-resources:
-  peer:
-    cpu_req: 0.3
-    mem_req: 256M
-  orderer:
-    cpu_req: 0.3
-    mem_req: 256M
-
 network:
   orderers:
     - 1.ordererorg

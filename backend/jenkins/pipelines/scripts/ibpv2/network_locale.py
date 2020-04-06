@@ -16,7 +16,7 @@ with open('./networkspec.yml', 'r') as stream:
 
 ibp = networkspec['ibp']
 ibp4ibp = ibp['ibp4ibp']
-resources = networkspec['resources']
+#resources = networkspec['resources']
 network = networkspec['network']
 orderersettings = networkspec['orderersettings']
 
