@@ -70,9 +70,11 @@ FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 peer_signed_cert=$(cat $work_dir/crypto-config/${org_name}/admin/msp/signcerts/cert.pem | base64 -w 0)
 root_certs=$(cat $work_dir/crypto-config/${org_name}/ca/enrollment/msp/signcerts/cert.pem | base64 -w 0)
 tls_root_certs=$(cat $work_dir/crypto-config/${org_name}/ca/tls/msp/signcerts/cert.pem | base64 -w 0)
+private_key=$(cat $work_dir/crypto-config/${org_name}/ca/tls/msp/keystore/* | base64 -w 0)
 
 echo $peer_signed_cert > $work_dir/crypto-config/${org_name}/peer_signed_cert
 echo $TLS_CERT > $work_dir/crypto-config/${org_name}/ca_tls_cert
 echo $root_certs > $work_dir/crypto-config/${org_name}/ca_admin_cert
 echo $tls_root_certs > $work_dir/crypto-config/${org_name}/tls_ca_cert
+echo $private_key > $work_dir/crypto-config/${org_name}/private_key
 

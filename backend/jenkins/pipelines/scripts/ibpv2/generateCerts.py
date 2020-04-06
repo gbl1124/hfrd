@@ -112,6 +112,9 @@ def generateConnectionProfiles(networkspec,componets):
 def generateIdentityProfiles(networkspec,componets):
     peerorg_names = []
     ordererorg_names = []
+    for orderer_object in networkspec['network']['orderers']:
+        ordererorg_names.append(orderer_object.split('.')[1])
+    ordererorg_names = list(set(ordererorg_names))
     peers = networkspec['network']['peers']
     for peer_object in peers:
         peerorg_names.append(peer_object.split('.')[1])
@@ -120,15 +123,36 @@ def generateIdentityProfiles(networkspec,componets):
     # generate collection profile for each peer organization
     for org in peerorg_names:
         identity_template = loadJsonContent('./templates/identity_template.json')
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/peer_signed_cert', 'r') as f1:
+            cert = f1.read()
+        f1.close()
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/private_key', 'r') as f2:
+            private_key = f2.read()
+        f2.close()
         # Load client
-        identity_template['name'] = org
-        identity_template['private_key']= searchfromcomponets(componets,org,'admins')
-        identity_template['cert'] = searchfromcomponets(componets,org,'root_certs')
+        identity_template['name'] = org + 'Admin'
+        identity_template['private_key']= private_key
+        identity_template['cert'] = cert
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/identity.json', 'w') as f:
             print('\nWriting identity file for ' + str(org) + ' - ' + f.name)
             json.dump(identity_template, f, indent=4)
         f.close()
-
+    for org in ordererorg_names:
+        identity_template = loadJsonContent('./templates/identity_template.json')
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/peer_signed_cert', 'r') as f1:
+            cert = f1.read()
+        f1.close()
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/private_key', 'r') as f2:
+            private_key = f2.read()
+        f2.close()
+        # Load client
+        identity_template['name'] = org + 'Admin'
+        identity_template['private_key']= private_key
+        identity_template['cert'] = cert
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/identity.json', 'w') as f:
+            print('\nWriting identity file for ' + str(org) + ' - ' + f.name)
+            json.dump(identity_template, f, indent=4)
+        f.close()
 # certsPath = /opt/src/scripts/ibpv2/keyfiles
 def generateCertificatesPackage(networkspec):
     certsPath = networkspec['work_dir'] + '/crypto-config/'
