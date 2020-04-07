@@ -96,7 +96,7 @@ FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 FABRIC_CA_CLIENT_HOME=${!var4} fabric-ca-client register -u https://admin:pass4chain@${!var1}:${!var0} --caname ${TLS_CA_NAME}  --id.name peertls --id.secret pass4chain --id.type peer --tls.certfiles ${!var}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
-peer_signed_cert=$(cat $work_dir/crypto-config/${org_name}/admin/msp/signcerts/cert.pem | base64 -w 0)
+peer_signed_cert=$(cat $work_dir/crypto-config/${org_name}/ca/msp/signcerts/cert.pem | base64 -w 0)
 root_certs=$(cat $work_dir/crypto-config/${org_name}/ca/enrollment/msp/signcerts/cert.pem | base64 -w 0)
 tls_root_certs=$(cat $work_dir/crypto-config/${org_name}/ca/tls/msp/signcerts/cert.pem | base64 -w 0)
 private_key=$(cat $work_dir/crypto-config/${org_name}/ca/tls/msp/keystore/* | base64 -w 0)
