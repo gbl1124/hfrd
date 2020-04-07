@@ -69,10 +69,10 @@ def create_peer(config,networkspec, org_name, peer_name):
     ca_tls_admin = open(work_dir + '/crypto-config/' + org_name + '/ca_tls_cert', 'r')
     peer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
-                                peer_admin.read(), ca_tls_admin.read(), 'peeradmin', 'admin')
+                                peer_admin.read(), ca_tls_admin.read(), 'peer1', 'peertls')
     peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template.json')
     peer_payload['msp_id'] = org_name
-    peer_payload['type'] = 'fabric-peer'
+    #peer_payload['type'] = 'fabric-peer'
     peer_payload['display_name'] = peer_name
     peer_payload['config'] = peer_config
     #peer_payload['resources']['peer']['requests']['cpu'] = networkspec['resources']['peer']['cpu_req']
@@ -101,7 +101,7 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
         ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_tls_cert', 'r')
         orderer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + service_name + '/' + service_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
-                                orderer_admin.read(), ca_tls_admin.read(), 'admin', 'admin')
+                                orderer_admin.read(), ca_tls_admin.read(), 'order', 'peertls')
         orderer_payload['config'].append(orderer_config)
         num_of_orderers -=  1
     utils.sendPostRequest(create_orderer_url, orderer_payload,
