@@ -1,7 +1,8 @@
 {
+    "cryptoPath": "orgname/users/Admin@orgname/msp",
     "mspid": "",
     "peers": [
     ],
-    "certificateAuthorities": [],
-    "cryptoPath": "orgname/users/Admin@orgname/msp"
+    "certificateAuthorities": []
+
 }
