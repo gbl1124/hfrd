@@ -30,14 +30,14 @@ def searchfromcomponets(componets,name,item):
 
 def generatePeerSection(templateContent, peerName,componets):
     templateContent['url'] = searchfromcomponets(componets,peerName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').split(':')[1]
+    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').repaces("//","").split(':')[1]
     templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('orgname',peerName)
     return templateContent
 
 
 def generateOrdererSection(templateContent, ordererName,componets):
     templateContent['url'] = searchfromcomponets(componets,ordererName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,ordererName,'api_url').split(':')[1]
+    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,ordererName,'api_url').repaces("//","").split(':')[1]
 
     templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('ordererorg', ordererName)
     return templateContent
