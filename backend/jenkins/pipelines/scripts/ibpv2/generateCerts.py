@@ -95,11 +95,10 @@ def generateConnectionProfiles(networkspec,componets):
                 connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets)
 
         ca_template = loadJsonContent('./templates/ca_template.json')
-        ca_template['name'] = org
         ca_template['caName'] = org + 'ca'
         ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
         ca_template['tlsCACerts']['path'] = ca_template['tlsCACerts']['path'].replace('orgname', org)
-        connection_template['certificateAuthorities'] = ca_template
+        connection_template['certificateAuthorities'][org + 'ca'] = ca_template
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)

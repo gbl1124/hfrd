@@ -1,5 +1,4 @@
-{   "name": "",
-    "url": "",
+{   "url": "",
     "caName": "",
     "tlsCACerts":{
         "path": "/fabric/keyfiles/orgname/tlsca/ca.pem"
