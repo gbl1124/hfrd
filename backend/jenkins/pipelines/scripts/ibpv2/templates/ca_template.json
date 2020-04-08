@@ -1,7 +1,7 @@
 {
     "url": "",
     "caName": "",
-    "tlsCACerts": {
-        "pem": ""
+    "tlsCACerts":{
+        "path": "/fabric/keyfiles/orgname/tlsca/ca.pem"
     }
 }
