@@ -1,6 +1,10 @@
 {
     "url": "",
+    "eventUrl":"",
+    "grpcOptions": {
+        "ssl-target-name-override": ""
+    },
     "tlsCACerts": {
-        "pem": ""
+        "path": "/fabric/keyfiles/orgname/tlsca/ca.pem"
     }
 }
