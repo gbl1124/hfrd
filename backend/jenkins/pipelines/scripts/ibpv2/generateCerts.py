@@ -28,27 +28,29 @@ def searchfromcomponets(componets,name,item):
     return  result
 
 
-def generatePeerSection(templateContent, peerName,orgName, componets):
+def generatePeerSection(templateContent, peerName,orgName, componets,networkspec):
     templateContent['url'] = searchfromcomponets(componets,peerName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').replace("//","").split(':')[1]
-    templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('orgname',orgName)
+    templateContent['grpcOptions']['ssl-target-name-override'].append(searchfromcomponets(componets,peerName,'api_url').replace("//","").split(':')[1])
+    with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/tlsca/ca.pem', 'r') as f1:
+        templateContent['tlsCACerts']['pem'] = f1.read()
+     f1.close()
     return templateContent
 
 
-def generateOrdererSection(templateContent, ordererName,componets):
+def generateOrdererSection(templateContent, ordererName,componets,networkspec):
     templateContent['url'] = searchfromcomponets(componets,ordererName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,ordererName,'api_url').replace("//","").split(':')[1]
-    templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('ordererorg', ordererName)
+    with open(networkspec['work_dir'] + '/crypto-config/' + ordererName + '/tlsca/ca.pem', 'r') as f1:
+        templateContent['tlsCACerts']['pem'] = f1.read()
+    f1.close()
     return templateContent
 
-def generateOrgSection(templateContent,orgName,peers,orgType):
+def generateOrgSection(templateContent,orgName,peers):
     templateContent['mspid'] = orgName
     templateContent['cryptoPath'] = templateContent['cryptoPath'].replace('orgname', orgName)
-    if orgType == 'peerorg':
-        templateContent['certificateAuthorities'][orgName] = orgName + 'ca'
-        for peer in peers:
-            if peer.split('.')[1] == orgName:
-                templateContent['peers'].append(orgName + peer.split('.')[0])
+    templateContent['certificateAuthorities'].append(orgName + 'ca')
+    for peer in peers:
+        if peer.split('.')[1] == orgName:
+           templateContent['peers'].append(orgName + peer.split('.')[0])
     return templateContent
 
 def generateConnectionProfiles(networkspec,componets):
@@ -68,12 +70,8 @@ def generateConnectionProfiles(networkspec,componets):
         # Load client
         connection_template['client']['organization'] = org
         # Load organizations including peer orgs and orderer org
-        for org_name in peerorg_names:
-            org_template = loadJsonContent('./templates/org_template.json')
-            connection_template['organizations'][org_name] = generateOrgSection(org_template, org_name, peers, 'peerorg')
         org_template = loadJsonContent('./templates/org_template.json')
-        for ordererorg_name in ordererorg_names:
-            connection_template['organizations'][ordererorg_name] = generateOrgSection(org_template, ordererorg_name,'','ordererorg')
+        connection_template['organizations'][org_name] = generateOrgSection(org_template, org_name, peers)
 
         # Load peers
         print peers
@@ -82,7 +80,7 @@ def generateConnectionProfiles(networkspec,componets):
             peer_name = peer.split('.')[0]
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
-            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name,org_name, componets)
+            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name,org_name, componets,networkspec)
         # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
@@ -91,12 +89,14 @@ def generateConnectionProfiles(networkspec,componets):
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
-                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets)
+                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets,networkspec)
 
         ca_template = loadJsonContent('./templates/ca_template.json')
         ca_template['caName'] = org + 'ca'
         ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
-        ca_template['tlsCACerts']['path'] = ca_template['tlsCACerts']['path'].replace('orgname', org)
+        with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/tls-ca-cert.pem', 'r') as f1:
+            ca_template['tlsCACerts']['pem'] = f1.read()
+        f1.close()
         connection_template['certificateAuthorities'][org + 'ca'] = ca_template
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
