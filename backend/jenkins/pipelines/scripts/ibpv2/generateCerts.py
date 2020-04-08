@@ -28,17 +28,16 @@ def searchfromcomponets(componets,name,item):
     return  result
 
 
-def generatePeerSection(templateContent, peerName,componets):
+def generatePeerSection(templateContent, peerName,orgName, componets):
     templateContent['url'] = searchfromcomponets(componets,peerName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').repaces("//","").split(':')[1]
-    templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('orgname',peerName)
+    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').replace("//","").split(':')[1]
+    templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('orgname',orgName)
     return templateContent
 
 
 def generateOrdererSection(templateContent, ordererName,componets):
     templateContent['url'] = searchfromcomponets(componets,ordererName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,ordererName,'api_url').repaces("//","").split(':')[1]
-
+    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,ordererName,'api_url').replace("//","").split(':')[1]
     templateContent['tlsCACerts']['path'] = templateContent['tlsCACerts']['path'].replace('ordererorg', ordererName)
     return templateContent
 
@@ -46,7 +45,7 @@ def generateOrgSection(templateContent,orgName,peers,orgType):
     templateContent['mspid'] = orgName
     templateContent['cryptoPath'] = templateContent['cryptoPath'].replace('orgname', orgName)
     if orgType == 'peerorg':
-        templateContent['certificateAuthorities'] = orgName + 'ca'
+        templateContent['certificateAuthorities'][orgName] = orgName + 'ca'
         for peer in peers:
             if peer.split('.')[1] == orgName:
                 templateContent['peers'].append(orgName + peer.split('.')[0])
@@ -83,7 +82,7 @@ def generateConnectionProfiles(networkspec,componets):
             peer_name = peer.split('.')[0]
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
-            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, componets)
+            connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name,org_name, componets)
         # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
