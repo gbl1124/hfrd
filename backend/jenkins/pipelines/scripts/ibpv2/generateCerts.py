@@ -30,16 +30,18 @@ def searchfromcomponets(componets,name,item):
 
 def generatePeerSection(templateContent, peerName,orgName, componets,networkspec):
     templateContent['url'] = searchfromcomponets(componets,peerName,'api_url')
-    templateContent['grpcOptions']['ssl-target-name-override'].append(searchfromcomponets(componets,peerName,'api_url').replace("//","").split(':')[1])
-    with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/tlsca/ca.pem', 'r') as f1:
+    templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').replace("//","").split(':')[1]
+
+    #templateContent['tlsCACerts']['pem'] =
+    with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/tls-ca-cert.pem', 'r') as f1:
         templateContent['tlsCACerts']['pem'] = f1.read()
-     f1.close()
+    f1.close()
     return templateContent
 
 
-def generateOrdererSection(templateContent, ordererName,componets,networkspec):
-    templateContent['url'] = searchfromcomponets(componets,ordererName,'api_url')
-    with open(networkspec['work_dir'] + '/crypto-config/' + ordererName + '/tlsca/ca.pem', 'r') as f1:
+def generateOrdererSection(templateContent, ordererorg_name, orderer_name,componets,networkspec):
+    templateContent['url'] = searchfromcomponets(componets,orderer_name,'api_url')
+    with open(networkspec['work_dir'] + '/crypto-config/' + ordererorg_name + '/tls-ca-cert.pem', 'r') as f1:
         templateContent['tlsCACerts']['pem'] = f1.read()
     f1.close()
     return templateContent
@@ -71,7 +73,7 @@ def generateConnectionProfiles(networkspec,componets):
         connection_template['client']['organization'] = org
         # Load organizations including peer orgs and orderer org
         org_template = loadJsonContent('./templates/org_template.json')
-        connection_template['organizations'][org_name] = generateOrgSection(org_template, org_name, peers)
+        connection_template['organizations'][org] = generateOrgSection(org_template, org, peers)
 
         # Load peers
         print peers
@@ -89,12 +91,12 @@ def generateConnectionProfiles(networkspec,componets):
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
-                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, componets,networkspec)
+                connection_template['orderers'][ordererorg_name] = generateOrdererSection(orderer_template, ordererorg_name, orderer_name,componets,networkspec)
 
         ca_template = loadJsonContent('./templates/ca_template.json')
         ca_template['caName'] = org + 'ca'
         ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
-        with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/tls-ca-cert.pem', 'r') as f1:
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/tls-ca-cert.pem', 'r') as f1:
             ca_template['tlsCACerts']['pem'] = f1.read()
         f1.close()
         connection_template['certificateAuthorities'][org + 'ca'] = ca_template
