@@ -54,15 +54,15 @@ FABRIC_CA_CLIENT_HOME=${ORDERER_ECA_FOLDER} fabric-ca-client enroll -u https://a
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 # register org admin
-FABRIC_CA_CLIENT_HOME=${ORDERER_ECA_FOLDER} fabric-ca-client register -u https://admin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${CA_NAME}  --id.name peeradmin --id.secret pass4chain --id.type admin --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
-FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
-
-# register peer
-FABRIC_CA_CLIENT_HOME=${ORDERER_ECA_FOLDER} fabric-ca-client register -u https://admin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${CA_NAME}  --id.name order --id.secret pass4chain --id.type order --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${ORDERER_ECA_FOLDER} fabric-ca-client register -u https://admin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${CA_NAME}  --id.name ordereradmin --id.secret pass4chain --id.type admin --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 # Enroll MSP
-FABRIC_CA_CLIENT_HOME=${ORDERER_ECA_FOLDER} fabric-ca-client enroll -u https://admin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${CA_NAME}  -M ${ORDERER_CA_FOLDER}/msp --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${ORDERER_ADMIN_FOLDER} fabric-ca-client enroll -u https://ordereradmin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${CA_NAME}  --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
+
+# register orderer
+FABRIC_CA_CLIENT_HOME=${ORDERER_ECA_FOLDER} fabric-ca-client register -u https://admin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${CA_NAME}  --id.name orderer --id.secret pass4chain --id.type orderer --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 #Enroll tlsca-admin with TLS CA
@@ -74,10 +74,10 @@ FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 FABRIC_CA_CLIENT_HOME=${ORDERER_TLSCA_FOLDER} fabric-ca-client register -u https://admin:pass4chain@${ORDERERORG_CA_HOST}:${ORDERERORG_CA_PORT} --caname ${TLS_CA_NAME}  --id.name peertls --id.secret pass4chain --id.type peer --tls.certfiles ${ORDERER_CA_FOLDER}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
-peer_signed_cert=$(cat $work_dir/crypto-config/${org_name}/ca/msp/signcerts/cert.pem | base64 -w 0)
+peer_signed_cert=$(cat $work_dir/crypto-config/${org_name}/admin/msp/signcerts/cert.pem | base64 -w 0)
 root_certs=$(cat $work_dir/crypto-config/${org_name}/ca/enrollment/msp/signcerts/cert.pem | base64 -w 0)
 tls_root_certs=$(cat $work_dir/crypto-config/${org_name}/ca/tls/msp/signcerts/cert.pem | base64 -w 0)
-private_key=$(cat $work_dir/crypto-config/${org_name}/ca/tls/msp/keystore/* | base64 -w 0)
+private_key=$(cat $work_dir/crypto-config/${org_name}/admin/msp/keystore/* | base64 -w 0)
 
 echo $peer_signed_cert > $work_dir/crypto-config/${org_name}/peer_signed_cert
 echo $TLS_CERT > $work_dir/crypto-config/${org_name}/ca_tls_cert

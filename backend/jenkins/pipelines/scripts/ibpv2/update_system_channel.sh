@@ -24,9 +24,9 @@ function restructure_msps(){
     set -x
     local BASE_DIR=$PWD/crypto-config/${ORDERER_ORG_NAME}
     cp ${BASE_DIR}/ca/tls-ca-cert.pem ${BASE_DIR}/
-    mv ${BASE_DIR}/ca/msp/cacerts ${BASE_DIR}/admin/
-    mv ${BASE_DIR}/ca/msp/keystore ${BASE_DIR}/admin/
-    mv ${BASE_DIR}/ca/msp/signcerts ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/admin/msp/cacerts ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/admin/msp/keystore ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/admin/msp/signcerts ${BASE_DIR}/admin/
     mkdir -p ${BASE_DIR}/admin/admincerts
     mkdir -p ${BASE_DIR}/admin/tlscacerts
     cp ${BASE_DIR}/ca/enrollment/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
@@ -45,9 +45,9 @@ function restructure_msps(){
         set -x
         local BASE_DIR=$PWD/crypto-config/${PEER_ORG_NAME}
         cp ${BASE_DIR}/ca/tls-ca-cert.pem ${BASE_DIR}/
-        mv ${BASE_DIR}/ca/msp/cacerts ${BASE_DIR}/admin/
-        mv ${BASE_DIR}/ca/msp/keystore ${BASE_DIR}/admin/
-        mv ${BASE_DIR}/ca/msp/signcerts ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/admin/msp/cacerts ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/admin/msp/keystore ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/admin/msp/signcerts ${BASE_DIR}/admin/
         mkdir -p ${BASE_DIR}/admin/admincerts
         mkdir -p ${BASE_DIR}/admin/tlscacerts
         cp ${BASE_DIR}/ca/enrollment/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
