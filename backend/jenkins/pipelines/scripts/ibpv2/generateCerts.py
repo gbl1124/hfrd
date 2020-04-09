@@ -158,8 +158,8 @@ def generateIdentityProfiles(networkspec,componets):
 def generateCertificatesPackage(networkspec):
     certsPath = networkspec['work_dir'] + '/crypto-config/'
     # restructure msp dir
-    mspCommand = 'cd '+ certsPath + ' && mkdir -p orgname/users/Admin@orgname/msp && cp -rf orgname/admin/* orgname/users/Admin@orgname/msp/'
-    tlsCommand = 'cd ' + certsPath + ' && mkdir -p orgname/tlsca && cp -rf orgname/msp/tlscacerts/*.pem orgname/tlsca/ca.pem'
+    peerCommand = 'cd '+ certsPath + '&& cd orgname && rm -r * !(connection.json | identity.json )'
+    orderCommand = 'cd ' + certsPath + ' && rm -r orgname'
     peerorg_names = []
     ordererorg_names = []
 
@@ -170,11 +170,7 @@ def generateCertificatesPackage(networkspec):
         peerorg_names.append(peer_object.split('.')[1])
     peerorg_names = list(set(peerorg_names))
     for org in peerorg_names:
-        os.system(mspCommand.replace('orgname', org))
-        os.system(tlsCommand.replace('orgname', org))
-        os.rename(certsPath + "/" + org + "/users/Admin@" + org + "/msp/signcerts/cert.pem", certsPath + "/" + org + "/users/Admin@" + org + "/msp/signcerts/Admin@" + org + "-cert.pem")
+        os.system(peerCommand.replace('orgname', org))
     # ordererorg
     for ordererorg_name in ordererorg_names:
-        os.system(mspCommand.replace('orgname', ordererorg_name))
-        os.system(tlsCommand.replace('orgname', ordererorg_name))
-        os.rename(certsPath + "/" + ordererorg_name + "/users/Admin@" + ordererorg_name + "/msp/signcerts/cert.pem", certsPath + "/" + ordererorg_name + "/users/Admin@" + ordererorg_name + "/msp/signcerts/Admin@" + ordererorg_name + "-cert.pem")
+        os.system(orderCommand.replace('orgname', ordererorg_name))

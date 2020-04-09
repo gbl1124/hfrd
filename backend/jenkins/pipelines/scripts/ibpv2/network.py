@@ -99,11 +99,13 @@ if action == 'POST':
     print 'E N D   U P D A T E   C H A N N E L '
     # Generate certs package
     componets = node.query_componets(config)
-    generateCerts.generateCertificatesPackage(networkspec)
     generateCerts.generateConnectionProfiles(networkspec,componets)
     generateCerts.generateIdentityProfiles(networkspec,componets)
-    os.system('cp -rf crypto-config keyfiles')
-    os.system('tar -zcf ibpcerts.tgz keyfiles/ && mv ibpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
+    generateCerts.generateCertificatesPackage(networkspec)
+    os.system('cp -rf crypto-config connection-profiles')
+    os.system('tar -zcf connection-profiles.tgz connection-profiles/ && mv connection-profiles.tgz connection-profiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
+    #os.system('cp -rf crypto-config keyfiles')
+    #os.system('tar -zcf ibpcerts.tgz keyfiles/ && mv ibpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
 elif action == 'DELETE':
     delete_all_url = config['Initiate']['Console_Url'] + config['Components']['delete_all_components']
     utils.sendDeleteRequest(delete_all_url, api_key, api_secret)
