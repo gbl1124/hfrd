@@ -90,7 +90,7 @@ do
              - &${PEER_ORG_NAME}
               Name: ${PEER_ORG_NAME}
               ID: ${PEER_ORG_NAME}
-              MSPDir: $work_dir/crypto-config/${PEER_ORG_NAME}/msp
+              MSPDir: $work_dir/crypto-config/${PEER_ORG_NAME}/users/admin/msp
 EOF
       fi
    done
