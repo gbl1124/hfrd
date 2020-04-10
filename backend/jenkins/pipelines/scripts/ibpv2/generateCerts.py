@@ -33,7 +33,7 @@ def generatePeerSection(templateContent, peerName,orgName, componets,networkspec
     templateContent['grpcOptions']['ssl-target-name-override'] = searchfromcomponets(componets,peerName,'api_url').replace("//","").split(':')[1]
 
     #templateContent['tlsCACerts']['pem'] =
-    with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/tls-ca-cert.pem', 'r') as f1:
+    with open(networkspec['work_dir'] + '/crypto-config/' + orgName + '/msptls.pem', 'r') as f1:
         templateContent['tlsCACerts']['pem'] = f1.read()
     f1.close()
     return templateContent
@@ -41,7 +41,7 @@ def generatePeerSection(templateContent, peerName,orgName, componets,networkspec
 
 def generateOrdererSection(templateContent, ordererorg_name, orderer_name,componets,networkspec):
     templateContent['url'] = searchfromcomponets(componets,orderer_name,'api_url')
-    with open(networkspec['work_dir'] + '/crypto-config/' + ordererorg_name + '/tls-ca-cert.pem', 'r') as f1:
+    with open(networkspec['work_dir'] + '/crypto-config/' + ordererorg_name + '/msptls.pem', 'r') as f1:
         templateContent['tlsCACerts']['pem'] = f1.read()
     f1.close()
     return templateContent
@@ -124,7 +124,7 @@ def generateIdentityProfiles(networkspec,componets):
     # generate collection profile for each peer organization
     for org in peerorg_names:
         identity_template = loadJsonContent('./templates/identity_template.json')
-        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/peer_signed_cert', 'r') as f1:
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/admin_cert', 'r') as f1:
             cert = f1.read()
         f1.close()
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/private_key', 'r') as f2:
@@ -140,7 +140,7 @@ def generateIdentityProfiles(networkspec,componets):
         f.close()
     for org in ordererorg_names:
         identity_template = loadJsonContent('./templates/identity_template.json')
-        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/peer_signed_cert', 'r') as f1:
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/admin_cert', 'r') as f1:
             cert = f1.read()
         f1.close()
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/private_key', 'r') as f2:

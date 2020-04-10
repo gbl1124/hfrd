@@ -46,9 +46,9 @@ def create_msp(org_name, node_type ,config,networkspec):
             print 'error found when create msp for org ' + org_name
             sys.exit(1)
     # Create a msp definition
-    admin = open(work_dir + '/crypto-config/' + org_name + '/peer_signed_cert', 'r')
-    root_certs = open(work_dir + '/crypto-config/' + org_name + '/ca_admin_cert', 'r')
-    tls_root_certs = open(work_dir + '/crypto-config/' + org_name + '/tls_ca_cert', 'r')
+    admin = open(work_dir + '/crypto-config/' + org_name + '/admin_cert', 'r')
+    root_certs = open(work_dir + '/crypto-config/' + org_name + '/root_cert', 'r')
+    tls_root_certs = open(work_dir + '/crypto-config/' + org_name + '/tls_root_cert', 'r')
     msp_data = {'msp_id':org_name, 'display_name': org_name, 'root_certs': [root_certs.read()], 'intermediate_certs': [],
             'admins':[admin.read()], 'tls_root_certs':[tls_root_certs.read()], 'revocation_list':[], 'organizational_unit_identifiers':['client','peer'],
             'fabric_node_ous':['client','peer']}
@@ -65,8 +65,8 @@ def create_peer(config,networkspec, org_name, peer_name):
     create_peer_url = config.get('Initiate', 'Console_Url') + config.get('Components', 'PEER')
     api_key = config.get('Initiate', 'Api_Key')
     api_secret = config.get('Initiate', 'Api_Secret')
-    peer_admin = open(work_dir + '/crypto-config/' + org_name + '/peer_signed_cert', 'r')
-    ca_tls_admin = open(work_dir + '/crypto-config/' + org_name + '/ca_tls_cert', 'r')
+    peer_admin = open(work_dir + '/crypto-config/' + org_name + '/admin_cert', 'r')
+    ca_tls_admin = open(work_dir + '/crypto-config/' + org_name + '/ca_cert', 'r')
     peer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
                                 peer_admin.read(), ca_tls_admin.read(), 'peer1', 'peertls')
@@ -97,8 +97,8 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
     #orderer_payload['resources']['orderer']['requests']['memory'] = networkspec['resources']['orderer']['mem_req']
 
     while(num_of_orderers > 0):
-        orderer_admin = open(work_dir + '/crypto-config/' + service_name + '/peer_signed_cert', 'r')
-        ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_tls_cert', 'r')
+        orderer_admin = open(work_dir + '/crypto-config/' + service_name + '/admin_cert', 'r')
+        ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_cert', 'r')
         orderer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + service_name + '/' + service_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
                                 orderer_admin.read(), ca_tls_admin.read(), 'orderer', 'peertls')
