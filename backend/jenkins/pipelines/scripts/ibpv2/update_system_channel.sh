@@ -35,9 +35,9 @@ function restructure_msps(){
     rm -rf ${BASE_DIR}/admin/msp
     rm -rf ${BASE_DIR}/ca
     mkdir -p ${BASE_DIR}/msp
-    cp -r ${BASE_DIR}/{ORDERER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/msp/
-    cp -r ${BASE_DIR}/{ORDERER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/msp/
-    cp -r ${BASE_DIR}/{ORDERER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/msp/
+    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/msp/
+    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/msp/
+    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/msp/
 
     for PEER_ORG_NAME in ${ORG_NAMES[*]}
     do
@@ -67,11 +67,11 @@ restructure_msps
 #downloadFabricBinaries
 
 export PATH=$PATH:$work_dir/bin/
-export ORDERER_TLS_CA=$(ls $work_dir/crypto-config/${ORDERER_ORG_NAME}/msp/tlscacerts/*)
+export ORDERER_TLS_CA=$(ls $work_dir/crypto-config/${ORDERER_ORG_NAME}/admin/tlscacerts/*)
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID=${ORDERER_ORG_NAME}
 export CORE_PEER_TLS_ROOTCERT_FILE=$ORDERER_TLS_CA
-export CORE_PEER_MSPCONFIGPATH=$work_dir/crypto-config/${ORDERER_ORG_NAME}/admin
+export CORE_PEER_MSPCONFIGPATH=$work_dir/crypto-config/${ORDERER_ORG_NAME}/msp
 
 ORDERER_URL=$(jq -r .api_url $work_dir/crypto-config/${ORDERER_ORG_NAME}/${ORDERER_ORG_NAME}-orderer_1.json)
 ORDERER_URL=${ORDERER_URL:8}
