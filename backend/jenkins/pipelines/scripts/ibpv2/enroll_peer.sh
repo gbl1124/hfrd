@@ -44,7 +44,7 @@ mkdir -p ${PEER_ORG_NAME_TLSCA_ADMIN}
 IFS=':' read -ra ADDR <<< "$CA_URL"
 export PROXY_IP=${ADDR[0]}
 var0=${ADDR[0]}
-var1=${ADDR[2]}
+var1=${ADDR[1]}
 NAME=${PEER_ORG_NAME}ca CA_HOST=${!var0} CA_PORT=${!var1} ./wait_for_pod.sh
 
 echo $TLS_CERT | base64 -d -w 0 > ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem

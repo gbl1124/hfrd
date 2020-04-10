@@ -41,9 +41,6 @@ mkdir -p ${PEER_ORG_NAME_TLSCA_ADMIN}
 
 IFS=':' read -ra ADDR <<< "$CA_URL"
 export PROXY_IP=${ADDR[0]}
-export ${PEER_ORG_NAME}_CA_HOST=${ADDR[0]}
-export ${PEER_ORG_NAME}_CA_PORT=${ADDR[1]}
-
 var0=${ADDR[0]}
 var1=${ADDR[1]}
 NAME=${PEER_ORG_NAME}ca CA_HOST=${!var0} CA_PORT=${!var1} ./wait_for_pod.sh
