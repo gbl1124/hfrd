@@ -24,9 +24,9 @@ function restructure_msps(){
     set -x
     local BASE_DIR=$PWD/crypto-config/${ORDERER_ORG_NAME}
     cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/
-    mv ${BASE_DIR}/ca-admin/msp/keystore ${BASE_DIR}/admin/
-    mv ${BASE_DIR}/ca-admin/msp/signcerts ${BASE_DIR}/admin/
-    mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/ca-admin/keystore ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/ca-admin/signcerts ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/ca-admin/cacerts ${BASE_DIR}/admin/
     mkdir -p ${BASE_DIR}/admin/admincerts
     mkdir -p ${BASE_DIR}/admin/tlscacerts
     cp ${BASE_DIR}/ca-admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
@@ -44,9 +44,9 @@ function restructure_msps(){
         set -x
         local BASE_DIR=$PWD/crypto-config/${PEER_ORG_NAME}
         cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/
-        mv ${BASE_DIR}/ca-admin/msp/keystore ${BASE_DIR}/admin/
-        mv ${BASE_DIR}/ca-admin/msp/signcerts ${BASE_DIR}/admin/
-        mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/ca-admin/keystore ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/ca-admin/signcerts ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/ca-admin/cacerts ${BASE_DIR}/admin/
         mkdir -p ${BASE_DIR}/admin/admincerts
         mkdir -p ${BASE_DIR}/admin/tlscacerts
         cp ${BASE_DIR}/ca-admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
@@ -55,9 +55,9 @@ function restructure_msps(){
         rm -rf ${BASE_DIR}/admin/msp
         rm -rf ${BASE_DIR}/ca
         mkdir -p ${BASE_DIR}/msp
-        cp -r ${BASE_DIR}/{PEER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/msp/
-        cp -r ${BASE_DIR}/{PEER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/msp/
-        cp -r ${BASE_DIR}/{PEER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/msp/
+        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/msp/
+        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/msp/
+        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/msp/
         # User Cert Copying
         set +x
     done
