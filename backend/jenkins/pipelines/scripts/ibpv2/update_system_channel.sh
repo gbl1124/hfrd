@@ -29,17 +29,17 @@ function restructure_msps(){
     mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
     mkdir -p ${BASE_DIR}/admin/admincerts
     mkdir -p ${BASE_DIR}/admin/tlscacerts
-    cp ${BASE_DIR}/admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
+    cp ${BASE_DIR}/ca-admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
     mv ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/admin/tlscacerts/tlsca.pem
     rm -rf ${BASE_DIR}/admin/fabric-ca-client-config.yaml
     rm -rf ${BASE_DIR}/admin/msp
     rm -rf ${BASE_DIR}/ca
     mkdir -p ${BASE_DIR}/msp
-    cp -r ${BASE_DIR}/admin/admincerts ${BASE_DIR}/msp/
-    cp -r ${BASE_DIR}/admin/cacerts ${BASE_DIR}/msp/
-    cp -r ${BASE_DIR}/admin/tlscacerts ${BASE_DIR}/msp/
+    cp -r ${BASE_DIR}/{ORDERER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/msp/
+    cp -r ${BASE_DIR}/{ORDERER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/msp/
+    cp -r ${BASE_DIR}/{ORDERER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/msp/
 
-    for PEER_ORG_NAME in ${ORG_NAMES[*]} PEER_ORG_NAME
+    for PEER_ORG_NAME in ${ORG_NAMES[*]}
     do
         set -x
         local BASE_DIR=$PWD/crypto-config/${PEER_ORG_NAME}
@@ -49,15 +49,15 @@ function restructure_msps(){
         mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
         mkdir -p ${BASE_DIR}/admin/admincerts
         mkdir -p ${BASE_DIR}/admin/tlscacerts
-        cp ${BASE_DIR}/admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
+        cp ${BASE_DIR}/ca-admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
         mv ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/admin/tlscacerts/tlsca.pem
         rm -rf ${BASE_DIR}/admin/fabric-ca-client-config.yaml
         rm -rf ${BASE_DIR}/admin/msp
         rm -rf ${BASE_DIR}/ca
         mkdir -p ${BASE_DIR}/msp
-        cp -r ${BASE_DIR}/admin/admincerts ${BASE_DIR}/msp/
-        cp -r ${BASE_DIR}/admin/cacerts ${BASE_DIR}/msp/
-        cp -r ${BASE_DIR}/admin/tlscacerts ${BASE_DIR}/msp/
+        cp -r ${BASE_DIR}/{PEER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/msp/
+        cp -r ${BASE_DIR}/{PEER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/msp/
+        cp -r ${BASE_DIR}/{PEER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/msp/
         # User Cert Copying
         set +x
     done
