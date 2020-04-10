@@ -61,7 +61,7 @@ FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN} fabric-ca-client enroll -u https
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 # register Orderer
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN}/msp fabric-ca-client register -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${CA_NAME}  --id.name orderer --id.secret pass4chain --id.type orderer --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN} fabric-ca-client register -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${CA_NAME}  --id.name orderer --id.secret pass4chain --id.type orderer --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 #Enroll tlsca-admin with TLS CA

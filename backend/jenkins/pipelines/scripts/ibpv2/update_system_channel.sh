@@ -29,7 +29,7 @@ function restructure_msps(){
     mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
     mkdir -p ${BASE_DIR}/admin/admincerts
     mkdir -p ${BASE_DIR}/admin/tlscacerts
-    cp ${BASE_DIR}/ca-admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
+    cp ${BASE_DIR}/admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
     mv ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/admin/tlscacerts/tlsca.pem
     rm -rf ${BASE_DIR}/admin/fabric-ca-client-config.yaml
     rm -rf ${BASE_DIR}/admin/msp
