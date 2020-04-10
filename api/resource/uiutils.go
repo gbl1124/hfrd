@@ -108,7 +108,9 @@ func GetItems(c *gin.Context, suffix string) (HFRDItemList, error) {
 				jobname = jenkins.K8SNETWORK
 			} else if strings.HasSuffix(networkid, "-i"){
 				jobname = jenkins.NETWORK_ICP
-			}
+			} else if strings.HasSuffix(networkid, "-b"){
+            	jobname = jenkins.NETWORK_IBP
+            }
 			jobid, status, err = jks.GetJobIdAndStatus(string(queueid), jobname)
 			// The job might be in queue and not scheduled yet
 			if err != nil {

@@ -16,7 +16,7 @@ import (
 func Ibpv2NetworkPost(c *gin.Context) {
 	thisLogger.Debugf("Start the IBP V2 Network creation process")
 	uid := c.Param("uid")
-	reqId := uuid.New().String()[0:8] + "-i"
+	reqId := uuid.New().String()[0:8] + "-b"
 	rootPath := utils.GetValue("contentRepo").(string) + "/" + uid + "/" + reqId
 	os.MkdirAll(rootPath, 0755)
 	form, err := c.MultipartForm()
@@ -47,7 +47,7 @@ func Ibpv2NetworkPost(c *gin.Context) {
 }
 
 func Ibpv2NetworkGet(c *gin.Context) {
-	nets, err := GetItems(c, "*-i")
+	nets, err := GetItems(c, "*-b")
 	if err != nil {
 		c.JSON(http.StatusServiceUnavailable, gin.H{})
 	}
