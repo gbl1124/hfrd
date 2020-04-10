@@ -24,12 +24,12 @@ function restructure_msps(){
     set -x
     local BASE_DIR=$PWD/crypto-config/${ORDERER_ORG_NAME}
     cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/
-    mv ${BASE_DIR}/admin/msp/keystore ${BASE_DIR}/admin/
-    mv ${BASE_DIR}/admin/msp/signcerts ${BASE_DIR}/admin/
-    mv ${BASE_DIR}/admin/msp/cacerts ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/ca-admin/msp/keystore ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/ca-admin/msp/signcerts ${BASE_DIR}/admin/
+    mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
     mkdir -p ${BASE_DIR}/admin/admincerts
     mkdir -p ${BASE_DIR}/admin/tlscacerts
-    cp ${BASE_DIR}/admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
+    cp ${BASE_DIR}/ca-admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
     mv ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/admin/tlscacerts/tlsca.pem
     rm -rf ${BASE_DIR}/admin/fabric-ca-client-config.yaml
     rm -rf ${BASE_DIR}/admin/msp
@@ -44,9 +44,9 @@ function restructure_msps(){
         set -x
         local BASE_DIR=$PWD/crypto-config/${PEER_ORG_NAME}
         cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/
-        mv ${BASE_DIR}/admin/msp/keystore ${BASE_DIR}/admin/
-        mv ${BASE_DIR}/admin/msp/signcerts ${BASE_DIR}/admin/
-        mv ${BASE_DIR}/admin/msp/cacerts ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/ca-admin/msp/keystore ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/ca-admin/msp/signcerts ${BASE_DIR}/admin/
+        mv ${BASE_DIR}/ca-admin/msp/cacerts ${BASE_DIR}/admin/
         mkdir -p ${BASE_DIR}/admin/admincerts
         mkdir -p ${BASE_DIR}/admin/tlscacerts
         cp ${BASE_DIR}/admin/msp/signcerts/* ${BASE_DIR}/admin/admincerts/
