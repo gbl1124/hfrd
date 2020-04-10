@@ -43,38 +43,38 @@ mkdir -p ${PEER_ORG_NAME_TLSCA_ADMIN}
 
 IFS=':' read -ra ADDR <<< "$CA_URL"
 export PROXY_IP=${ADDR[0]}
-var0=${ADDR[0]}
-var1=${ADDR[1]}
-NAME=${PEER_ORG_NAME}ca CA_HOST=${!var0} CA_PORT=${!var1} ./wait_for_pod.sh
+RORG_CA_HOST=${ADDR[0]}
+RORG_CA_PORT=${ADDR[1]}
+NAME=${PEER_ORG_NAME}ca CA_HOST=${RORG_CA_HOST} CA_PORT=${!var1} ./wait_for_pod.sh
 
 echo $TLS_CERT | base64 -d -w 0 > ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem
 
 CSRHOSTS="${PROXY_IP},${PEER_ORG_NAME},127.0.0.1,localhost"
 
 # Enroll ca admin
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN} fabric-ca-client enroll -u https://admin:pass4chain@${!var1}:${!var0} --caname ${CA_NAME} --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN} fabric-ca-client enroll -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${CA_NAME} --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 # register org admin
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN} fabric-ca-client register -u https://admin:pass4chain@${!var1}:${!var0} --caname ${CA_NAME}  --id.name peeradmin --id.secret pass4chain --id.type admin --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_CA_ADMIN} fabric-ca-client register -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${CA_NAME}  --id.name peeradmin --id.secret pass4chain --id.type admin --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 
 # Enroll MSP
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_MSP} fabric-ca-client enroll -u https://peeradmin:pass4chain@${!var1}:${!var0} --caname ${CA_NAME}  --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_MSP} fabric-ca-client enroll -u https://peeradmin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${CA_NAME}  --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 # register peer
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_MSP} fabric-ca-client register -u https://admin:pass4chain@${!var1}:${!var0} --caname ${CA_NAME}  --id.name peer1 --id.secret pass4chain --id.type peer --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_MSP} fabric-ca-client register -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${CA_NAME}  --id.name peer1 --id.secret pass4chain --id.type peer --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 #Enroll tlsca-admin with TLS CA
 
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_TLSCA_ADMIN} fabric-ca-client enroll -u https://admin:pass4chain@${!var1}:${!var0} --caname ${TLS_CA_NAME} --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_TLSCA_ADMIN} fabric-ca-client enroll -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${TLS_CA_NAME} --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 # register TLS CA
-FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_TLSCA_ADMIN} fabric-ca-client register -u https://admin:pass4chain@${!var1}:${!var0} --caname ${TLS_CA_NAME}  --id.name peertls --id.secret pass4chain --id.type peer --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
+FABRIC_CA_CLIENT_HOME=${PEER_ORG_NAME_TLSCA_ADMIN} fabric-ca-client register -u https://admin:pass4chain@${RORG_CA_HOST}:${RORG_CA_PORT} --caname ${TLS_CA_NAME}  --id.name peertls --id.secret pass4chain --id.type peer --tls.certfiles ${PEER_ORG_NAME_CA_TLS}/tls-ca-cert.pem --csr.hosts ${CSRHOSTS}
 FABRIC_CLIENT_RC=$(($FABRIC_CLIENT_RC + $?))
 
 admin_cert=$(cat $work_dir/crypto-config/${org_name}/admin/msp/signcerts/cert.pem | base64 -w 0)
