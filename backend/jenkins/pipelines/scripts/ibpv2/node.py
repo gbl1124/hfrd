@@ -49,9 +49,8 @@ def create_msp(org_name, node_type ,config,networkspec):
     admin = open(work_dir + '/crypto-config/' + org_name + '/admin_cert', 'r')
     root_certs = open(work_dir + '/crypto-config/' + org_name + '/root_cert', 'r')
     tls_root_certs = open(work_dir + '/crypto-config/' + org_name + '/tls_root_cert', 'r')
-    msp_data = {'msp_id':org_name, 'display_name': org_name, 'root_certs': [root_certs.read()], 'intermediate_certs': [],
-            'admins':[admin.read()], 'tls_root_certs':[tls_root_certs.read()], 'revocation_list':[], 'organizational_unit_identifiers':['client','peer'],
-            'fabric_node_ous':['client','peer']}
+    msp_data = {'msp_id':org_name, 'display_name': org_name, 'root_certs': [root_certs.read()],
+            'admins':[admin.read()], 'tls_root_certs':[tls_root_certs.read()]}
     print msp_data
     with open(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'msp.json', 'w') as outfile:
                 json.dump(msp_data, outfile)
