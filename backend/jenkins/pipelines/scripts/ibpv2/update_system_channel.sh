@@ -25,8 +25,8 @@ function restructure_msps(){
     local BASE_DIR=$PWD/crypto-config/${ORDERER_ORG_NAME}
     mkdir -p ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/admincerts
     mkdir -p ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/tlscacerts
-    cp ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts/* ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/admin/msp/admincerts/
-    cp ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/tlscacerts/tlsca.pem
+    cp ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts/*  ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/admincerts/
+    cp ${BASE_DIR}/tlsca-admin/msp/cacerts/*  ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/tlscacerts/tlsca.pem
     cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/
     cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/
     cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/
