@@ -65,7 +65,7 @@ def create_peer(config,networkspec, org_name, peer_name):
     api_key = config.get('Initiate', 'Api_Key')
     api_secret = config.get('Initiate', 'Api_Secret')
     peer_admin = open(work_dir + '/crypto-config/' + org_name + '/admin_cert', 'r')
-    ca_tls_admin = open(work_dir + '/crypto-config/' + org_name + '/tls_root_cert', 'r')
+    ca_tls_admin = open(work_dir + '/crypto-config/' + org_name + '/ca_cert', 'r')
     peer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
                                 peer_admin.read(), ca_tls_admin.read(), 'peer1', 'peertls')
@@ -97,7 +97,7 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
 
     while(num_of_orderers > 0):
         orderer_admin = open(work_dir + '/crypto-config/' + service_name + '/admin_cert', 'r')
-        ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/tls_root_cert', 'r')
+        ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_cert', 'r')
         orderer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + service_name + '/' + service_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
                                 orderer_admin.read(), ca_tls_admin.read(), 'orderer', 'peertls')
