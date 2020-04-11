@@ -96,7 +96,7 @@ def generateConnectionProfiles(networkspec,componets):
         ca_template = loadJsonContent('./templates/ca_template.json')
         ca_template['caName'] = org + 'ca'
         ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
-        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/tls-ca-cert.pem', 'r') as f1:
+        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/catls/tls-ca-cert.pem', 'r') as f1:
             ca_template['tlsCACerts']['pem'] = f1.read()
         f1.close()
         connection_template['certificateAuthorities'][org + 'ca'] = ca_template
@@ -105,10 +105,10 @@ def generateConnectionProfiles(networkspec,componets):
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
             json.dump(connection_template, f, indent=4)
         f.close()
-        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.yml', 'w') as f:
-            print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
-            yaml.safe_dump(connection_template, f, allow_unicode=True)
-        f.close()
+        #with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.yml', 'w') as f:
+        #   print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
+        #   yaml.safe_dump(connection_template, f, allow_unicode=True)
+        #f.close()
 
 def generateIdentityProfiles(networkspec,componets):
     peerorg_names = []

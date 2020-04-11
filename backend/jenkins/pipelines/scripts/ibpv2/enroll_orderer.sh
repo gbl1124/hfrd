@@ -85,4 +85,4 @@ echo $root_certs > $work_dir/crypto-config/${org_name}/root_cert
 echo $tls_root_certs > $work_dir/crypto-config/${org_name}/tls_root_cert
 echo $private_key > $work_dir/crypto-config/${org_name}/private_key
 echo $TLS_CERT > $work_dir/crypto-config/${org_name}/ca_cert
-cp  $work_dir/crypto-config/${org_name}/${PEER_ORG_NAME}-admin/msp/cacerts/*.pem $work_dir/crypto-config/${org_name}/msptls.pem
+cp  $work_dir/crypto-config/${org_name}/tlsca-admin/msp/cacerts/*.pem $work_dir/crypto-config/${org_name}/msptls.pem
