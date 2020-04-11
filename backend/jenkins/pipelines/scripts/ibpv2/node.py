@@ -100,7 +100,7 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
         ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_cert', 'r')
         orderer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + service_name + '/' + service_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
-                                orderer_admin.read(), ca_tls_admin.read(), 'orderer', 'peertls')
+                                orderer_admin.read(), ca_tls_admin.read(), 'orderadmin', 'peertls')
         orderer_payload['config'].append(orderer_config)
         num_of_orderers -=  1
     utils.sendPostRequest(create_orderer_url, orderer_payload,
