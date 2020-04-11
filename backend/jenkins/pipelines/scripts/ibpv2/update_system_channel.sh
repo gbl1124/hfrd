@@ -23,27 +23,26 @@ rm -rf ${ARTIFACTS} config_update.json *.block
 function restructure_msps(){
     set -x
     local BASE_DIR=$PWD/crypto-config/${ORDERER_ORG_NAME}
-    mkdir -p ${BASE_DIR}/users/admin/msp/admincerts
-    mkdir -p ${BASE_DIR}/users/admin/msp/tlscacerts
-    cp ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts/* ${BASE_DIR}/users/admin/msp/admincerts/
-    cp ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/users/admin/msp/tlscacerts/tlsca.pem
-    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/users/admin/msp/
-    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/users/admin/msp/
-    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/users/admin/msp/
-    cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/
+    mkdir -p ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/admincerts
+    mkdir -p ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/tlscacerts
+    cp ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts/* ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/admin/msp/admincerts/
+    cp ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/tlscacerts/tlsca.pem
+    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/
+    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/
+    cp -r ${BASE_DIR}/${ORDERER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/
+    cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/certs/${ORDERER_ORG_NAME}ca/
     for PEER_ORG_NAME in ${ORG_NAMES[*]}
     do
         set -x
 
         local BASE_DIR=$PWD/crypto-config/${PEER_ORG_NAME}
-        mkdir -p ${BASE_DIR}/users/admin/msp/admincerts
-        mkdir -p ${BASE_DIR}/users/admin/msp/tlscacerts
-        cp ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/signcerts/* ${BASE_DIR}/users/admin/msp/admincerts/
-        cp ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/users/admin/msp/tlscacerts/tlsca.pem
-        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/users/admin/msp/
-        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/users/admin/msp/
-        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/users/admin/msp/
-        cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/
+        mkdir -p ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/admincerts
+        mkdir -p ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/tlscacerts
+        cp ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/tlscacerts/tlsca.pem
+        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/
+        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/
+        cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/cacerts ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/
+        cp ${BASE_DIR}/catls/tls-ca-cert.pem ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/
         # User Cert Copying
         set +x
     done
@@ -53,11 +52,11 @@ restructure_msps
 #downloadFabricBinaries
 
 export PATH=$PATH:$work_dir/bin/
-export ORDERER_TLS_CA=$(ls $work_dir/crypto-config/${ORDERER_ORG_NAME}/users/admin/msp/tlscacerts/*)
+export ORDERER_TLS_CA=$(ls $work_dir/crypto-config/${ORDERER_ORG_NAME}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp/tlscacerts/*)
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID=${ORDERER_ORG_NAME}
 export CORE_PEER_TLS_ROOTCERT_FILE=$ORDERER_TLS_CA
-export CORE_PEER_MSPCONFIGPATH=$work_dir/crypto-config/${ORDERER_ORG_NAME}/users/admin/msp
+export CORE_PEER_MSPCONFIGPATH=$work_dir/crypto-config/${ORDERER_ORG_NAME}/certs/${ORDERER_ORG_NAME}ca/users/admin/msp
 
 ORDERER_URL=$(jq -r .api_url $work_dir/crypto-config/${ORDERER_ORG_NAME}/${ORDERER_ORG_NAME}-orderer_1.json)
 ORDERER_URL=${ORDERER_URL:8}
@@ -90,7 +89,7 @@ do
              - &${PEER_ORG_NAME}
               Name: ${PEER_ORG_NAME}
               ID: ${PEER_ORG_NAME}
-              MSPDir: $work_dir/crypto-config/${PEER_ORG_NAME}/users/admin/msp
+              MSPDir: $work_dir/crypto-config/${PEER_ORG_NAME}/certs/${PEER_ORG_NAME}ca/users/admin/msp
 EOF
       fi
    done
