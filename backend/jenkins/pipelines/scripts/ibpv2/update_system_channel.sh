@@ -34,10 +34,10 @@ function restructure_msps(){
     for PEER_ORG_NAME in ${ORG_NAMES[*]}
     do
         set -x
-
         local BASE_DIR=$PWD/crypto-config/${PEER_ORG_NAME}
         mkdir -p ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/admincerts
         mkdir -p ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/tlscacerts
+        cp ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/signcerts/*  ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/admincerts/
         cp ${BASE_DIR}/tlsca-admin/msp/cacerts/* ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/tlscacerts/tlsca.pem
         cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/keystore ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/
         cp -r ${BASE_DIR}/${PEER_ORG_NAME}-admin/msp/signcerts ${BASE_DIR}/certs/${PEER_ORG_NAME}ca/users/admin/msp/
