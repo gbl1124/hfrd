@@ -46,13 +46,14 @@ def generateOrdererSection(templateContent, ordererorg_name, orderer_name,compon
     f1.close()
     return templateContent
 
-def generateOrgSection(templateContent,orgName,peers):
+def generateOrgSection(templateContent,orgName,peers,type):
     templateContent['mspid'] = orgName
     templateContent['cryptoPath'] = templateContent['cryptoPath'].replace('orgname', orgName)
     templateContent['certificateAuthorities'].append(orgName + 'ca')
-    for peer in peers:
-        if peer.split('.')[1] == orgName:
-           templateContent['peers'].append(orgName + peer.split('.')[0])
+    if type == 'peer':
+        for peer in peers:
+            if peer.split('.')[1] == orgName:
+                templateContent['peers'].append(orgName + peer.split('.')[0])
     return templateContent
 
 def generateConnectionProfiles(networkspec,componets):
@@ -73,8 +74,9 @@ def generateConnectionProfiles(networkspec,componets):
         connection_template['client']['organization'] = org
         # Load organizations including peer orgs and orderer org
         org_template = loadJsonContent('./templates/org_template.json')
-        connection_template['organizations'][org] = generateOrgSection(org_template, org, peers)
-
+        connection_template['organizations'][org] = generateOrgSection(org_template, org, peers,'peer')
+        for ordererorg_name in ordererorg_names:
+            connection_template['organizations'][ordererorg_name] = generateOrgSection(org_template, ordererorg_name,'','order')
         # Load peers
         print peers
         for peer in peers:
@@ -83,7 +85,8 @@ def generateConnectionProfiles(networkspec,componets):
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
             connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name,org_name, componets,networkspec)
-        # Load orderers
+
+    # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
             orderer_num = ordererorg.split('.')[0]
