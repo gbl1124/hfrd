@@ -66,7 +66,14 @@ def generateConnectionProfiles(networkspec,componets):
     for peer_object in peers:
         peerorg_names.append(peer_object.split('.')[1])
     peerorg_names = list(set(peerorg_names))
-
+    # create a empty connection.json for oder reorg
+    for ordererorg_name in ordererorg_names:
+       connection_template = loadJsonContent('./templates/connection_template.json')
+       with open(networkspec['work_dir'] + '/crypto-config/' + ordererorg_name + '/connection.json', 'w') as f:
+          print('\nWriting connection file for ' + str(ordererorg_name) + ' - ' + f.name)
+          json.dump(connection_template, f, indent=4)
+       f.close()
+    
     # generate collection profile for each peer organization
     for org in peerorg_names:
         connection_template = loadJsonContent('./templates/connection_template.json')
@@ -74,8 +81,8 @@ def generateConnectionProfiles(networkspec,componets):
         connection_template['client']['organization'] = org
         # Load organizations including peer orgs and orderer org
         org_template = loadJsonContent('./templates/org_template.json')
-        connection_template['organizations'][org] = generateOrgSection(org_template, org, peers,'peer')
         for ordererorg_name in ordererorg_names:
+            connection_template['organizations'][org] = generateOrgSection(org_template, org, peers,'peer')
             connection_template['organizations'][ordererorg_name] = generateOrgSection(org_template, ordererorg_name,'','order')
         # Load peers
         print peers

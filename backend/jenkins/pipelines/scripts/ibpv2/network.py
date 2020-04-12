@@ -101,7 +101,7 @@ if action == 'POST':
     componets = node.query_componets(config)
     generateCerts.generateConnectionProfiles(networkspec,componets)
     generateCerts.generateIdentityProfiles(networkspec,componets)
-    generateCerts.generateCertificatesPackage(networkspec)
+    #generateCerts.generateCertificatesPackage(networkspec)
     os.system('cp -rf crypto-config connection-profiles')
     os.system('tar -zcf connection-profiles.tgz connection-profiles/ && mv connection-profiles.tgz connection-profiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
     #os.system('cp -rf crypto-config keyfiles')
