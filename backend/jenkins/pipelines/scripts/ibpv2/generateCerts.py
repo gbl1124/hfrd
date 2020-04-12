@@ -73,16 +73,19 @@ def generateConnectionProfiles(networkspec,componets):
           print('\nWriting connection file for ' + str(ordererorg_name) + ' - ' + f.name)
           json.dump(connection_template, f, indent=4)
        f.close()
-    
+
     # generate collection profile for each peer organization
     for org in peerorg_names:
         connection_template = loadJsonContent('./templates/connection_template.json')
         # Load client
         connection_template['client']['organization'] = org
         # Load organizations including peer orgs and orderer org
-        org_template = loadJsonContent('./templates/org_template.json')
-        for ordererorg_name in ordererorg_names:
+        for org in peerorg_names:
+            org_template = loadJsonContent('./templates/org_template.json')
             connection_template['organizations'][org] = generateOrgSection(org_template, org, peers,'peer')
+        # organizations for orderer
+        for ordererorg_name in ordererorg_names:
+            org_template = loadJsonContent('./templates/org_template.json')
             connection_template['organizations'][ordererorg_name] = generateOrgSection(org_template, ordererorg_name,'','order')
         # Load peers
         print peers
@@ -101,15 +104,15 @@ def generateConnectionProfiles(networkspec,componets):
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
-                connection_template['orderers'][ordererorg_name] = generateOrdererSection(orderer_template, ordererorg_name, orderer_name,componets,networkspec)
-
-        ca_template = loadJsonContent('./templates/ca_template.json')
-        ca_template['caName'] = org + 'ca'
-        ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
-        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/catls/tls-ca-cert.pem', 'r') as f1:
-            ca_template['tlsCACerts']['pem'] = f1.read()
-        f1.close()
-        connection_template['certificateAuthorities'][org + 'ca'] = ca_template
+                connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, ordererorg_name, orderer_name,componets,networkspec)
+        for org in peerorg_names:
+            ca_template = loadJsonContent('./templates/ca_template.json')
+            ca_template['caName'] = org + 'ca'
+            ca_template['url'] = searchfromcomponets(componets, org + 'ca', 'api_url')
+            with open(networkspec['work_dir'] + '/crypto-config/' + org + '/catls/tls-ca-cert.pem', 'r') as f1:
+                ca_template['tlsCACerts']['pem'] = f1.read()
+            f1.close()
+            connection_template['certificateAuthorities'][org + 'ca'] = ca_template
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
