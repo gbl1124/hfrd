@@ -161,19 +161,19 @@ def generateIdentityProfiles(networkspec,componets):
 def generateCertificatesPackage(networkspec):
     certsPath = networkspec['work_dir'] + '/crypto-config/'
     # restructure msp dir
-    peerCommand = 'cd '+ certsPath + '&& cd orgname && rm -r * !(connection.json | identity.json )'
+    #peerCommand = 'cd '+ certsPath + '&& cd orgname && rm -r * !(connection.json | identity.json )'
     orderCommand = 'cd ' + certsPath + ' && rm -r orgname'
-    peerorg_names = []
+    #peerorg_names = []
     ordererorg_names = []
 
     for orderer_object in networkspec['network']['orderers']:
         ordererorg_names.append(orderer_object.split('.')[1])
     ordererorg_names = list(set(ordererorg_names))
-    for peer_object in networkspec['network']['peers']:
-        peerorg_names.append(peer_object.split('.')[1])
-    peerorg_names = list(set(peerorg_names))
-    for org in peerorg_names:
-        os.system(peerCommand.replace('orgname', org))
+    #for peer_object in networkspec['network']['peers']:
+    #    peerorg_names.append(peer_object.split('.')[1])
+    #peerorg_names = list(set(peerorg_names))
+    #for org in peerorg_names:
+    #    os.system(peerCommand.replace('orgname', org))
     # ordererorg
     for ordererorg_name in ordererorg_names:
         os.system(orderCommand.replace('orgname', ordererorg_name))
