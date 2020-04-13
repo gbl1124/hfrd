@@ -113,15 +113,16 @@ def generateConnectionProfiles(networkspec,componets):
                 ca_template['tlsCACerts']['pem'] = f1.read()
             f1.close()
             connection_template['certificateAuthorities'][org + 'ca'] = ca_template
-        # write out connection file
+    # write out connection file
+    for org in peerorg_names:
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
             print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
             json.dump(connection_template, f, indent=4)
         f.close()
-        #with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.yml', 'w') as f:
-        #   print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
-        #   yaml.safe_dump(connection_template, f, allow_unicode=True)
-        #f.close()
+    #with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.yml', 'w') as f:
+    #   print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
+    #   yaml.safe_dump(connection_template, f, allow_unicode=True)
+    #f.close()
 
 def generateIdentityProfiles(networkspec,componets):
     peerorg_names = []
