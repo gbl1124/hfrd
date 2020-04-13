@@ -97,13 +97,13 @@ def generateConnectionProfiles(networkspec,componets):
             connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name,org_name, componets,networkspec)
 
     # Load orderers
-        orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
             orderer_num = ordererorg.split('.')[0]
             ordererorg_name = ordererorg.split('.')[1]
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
+                orderer_template = loadJsonContent('./templates/orderer_template.json')
                 connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, ordererorg_name, orderer_name,componets,networkspec)
         for org in peerorg_names:
             ca_template = loadJsonContent('./templates/ca_template.json')
