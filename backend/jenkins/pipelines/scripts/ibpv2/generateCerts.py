@@ -75,10 +75,10 @@ def generateConnectionProfiles(networkspec,componets):
        f.close()
 
     # generate collection profile for each peer organization
-    for org in peerorg_names:
+    for orgname in peerorg_names:
         connection_template = loadJsonContent('./templates/connection_template.json')
         # Load client
-        connection_template['client']['organization'] = org
+        connection_template['client']['organization'] = orgname
         # Load organizations including peer orgs and orderer org
         for org in peerorg_names:
             org_template = loadJsonContent('./templates/org_template.json')
@@ -114,9 +114,8 @@ def generateConnectionProfiles(networkspec,componets):
             f1.close()
             connection_template['certificateAuthorities'][org + 'ca'] = ca_template
     # write out connection file
-    for org in peerorg_names:
-        with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:
-            print('\nWriting connection file for ' + str(org) + ' - ' + f.name)
+        with open(networkspec['work_dir'] + '/crypto-config/' + orgname + '/connection.json', 'w') as f:
+            print('\nWriting connection file for ' + str(orgname) + ' - ' + f.name)
             json.dump(connection_template, f, indent=4)
         f.close()
     #with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.yml', 'w') as f:
