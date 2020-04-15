@@ -19,6 +19,7 @@ else
 fi
 
 rootdir=~/hfrd
+installdir=~/hfrd-gbl/hfrd
 
 function printHelp () {
     echo "Usage: ./hfrd.sh <start {public ip} {configFile path} | stop >"
@@ -131,7 +132,7 @@ function starthfrd() {
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v $rootdir/jenkins:/var/jenkins_home \
             -v $rootdir/contentRepo:/opt/hfrd/contentRepo \
-            -p 8080:8080 -p 50000:50000 hfrd/jenkins:latest
+            -p 8080:8080 -p 50000:50000 hfrd/jenkins-ibpv2:latest
 
         while : ; do
           res=$(docker logs jenkins 2>&1 | grep 'Jenkins is fully up and running')
@@ -183,12 +184,20 @@ endmsg
 
     echo "API server http://${PUBLIC_IP}:9090"
     echo "Jenkins server http://${PUBLIC_IP}:8080"
+
+    docker run -d --rm --name ocp-dns-proxy \
+    --network ibp_ocp --ip 172.3.27.2 \
+    -p 53:53/udp \
+    -v $installdir/backend/jenkins/docker/resolv.conf:/etc/resolv.conf \
+    -v $installdir/backend/jenkins/docker/dnsmasq.conf:/etc/dnsmasq.conf \
+    ocp-dns-proxy:latest
 }
 
 function stophfrd(){
     docker rm -f hfrdserver
     docker rm -f couchdb
     docker rm -f hfrdapache
+    docker rm -f ocp-dns-proxy
 }
 
 if [ "${START_STOP}" == "stop" ]; then
