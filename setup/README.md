@@ -10,15 +10,15 @@ git clone https://github.com/gbl1124/hfrd.git
 #######Make API
 On path: /hfrd
 make api-docker
-    #Chan
+#Change path in hfrd.sh
 On path: /hfrd/setup/hfrd.sh
     update rootdir=~/hfrd   #This is the test result saved path.
-
+           install=~/hfrd-gbl/hfrd #This is the path you git clone.
 
 #########Build Docker image
 ###Image for Jenkins
 On path:  /hfrd/docker/jenkins-ansible
-docker build -t hfrd/jenkins:$ibpv2-latest .
+docker build -t hfrd/jenkins:ibpv2-latest .
 
 ###Image for bxbox
 On path: /hfrd/backend/jenkins
@@ -26,7 +26,7 @@ docker build -f  docker/bxbox_alpine -t bxbox_alpine .
 
 ###Image for ocp-dns-proxy
 On path: /hfrd/backend/jenkins
-docker build -f  docker/ocp-dns-proxy.dockerfile  -t  ocp-dns-proxy
+docker build -f  docker/ocp-dns-proxy.dockerfile  -t  ocp-dns-proxy .
 
 ###############################################################
 ## Create a custom docker network
@@ -51,11 +51,10 @@ cp /etc/resolv.conf to /hfrd/backend/jenkins/docker
 add nameserver 127.0.0.1 into /hfrd/backend/jenkins/docker/resolv.conf
 Note: Please make sure it on the first line
 
-If you need change the hostname.
+If you need upddate the hostname or add a new hostname.
 update server=/hostname/ip in the following file: for example: server=/apps.ibp-perf-zvm.openshift.zpa.ibm.com/9.12.44.56
 /hfrd/backend/jenkins/docker/dnsmasq.conf
 ################################################################
-
 
 Start up:
 

@@ -132,7 +132,7 @@ function starthfrd() {
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v $rootdir/jenkins:/var/jenkins_home \
             -v $rootdir/contentRepo:/opt/hfrd/contentRepo \
-            -p 8080:8080 -p 50000:50000 hfrd/jenkins-ibpv2:latest
+            -p 8080:8080 -p 50000:50000 hfrd/jenkins:ibpv2-latest
 
         while : ; do
           res=$(docker logs jenkins 2>&1 | grep 'Jenkins is fully up and running')
