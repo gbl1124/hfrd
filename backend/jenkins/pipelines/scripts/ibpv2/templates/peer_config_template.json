@@ -1,5 +1,31 @@
 {
     "msp_id": "",
     "display_name": "",
-    "config": {}
+    "state_db": "",
+    "config": {
+        "peer":{
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        },
+        "couchdb":{
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        },
+        "proxy":{
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        },
+        "dind":{
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        }
+    }
 }
