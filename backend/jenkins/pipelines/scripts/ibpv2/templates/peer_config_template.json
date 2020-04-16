@@ -3,6 +3,8 @@
     "display_name": "",
     "state_db": "",
     "config": {
+    },
+    "resources": {
         "peer":{
             "requests": {
                 "cpu": "1",
