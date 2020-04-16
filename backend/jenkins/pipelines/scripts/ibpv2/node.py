@@ -77,8 +77,8 @@ def create_peer(config,networkspec, org_name, peer_name):
     peer_payload['config'] = peer_config
     peer_payload['resources']['peer']['requests']['cpu'] = networkspec['resources']['peer']['cpu_req']
     peer_payload['resources']['peer']['requests']['memory'] = networkspec['resources']['peer']['mem_req']
-    peer_payload['resources']['couchdb']['requests']['cpu'] = networkspec['resources']['statedb']['cpu_req']
-    peer_payload['resources']['couchdb']['requests']['memory'] = networkspec['resources']['statedb']['mem_req']
+    peer_payload['resources']['couchdb']['requests']['cpu'] = networkspec['resources']['couchdb']['cpu_req']
+    peer_payload['resources']['couchdb']['requests']['memory'] = networkspec['resources']['couchdb']['mem_req']
     peer_payload['resources']['proxy']['requests']['cpu'] = networkspec['resources']['proxy']['cpu_req']
     peer_payload['resources']['proxy']['requests']['memory'] = networkspec['resources']['proxy']['mem_req']
     peer_payload['resources']['dind']['requests']['cpu'] = networkspec['resources']['dind']['cpu_req']
