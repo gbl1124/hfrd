@@ -57,7 +57,10 @@ Users can also set `concurrencyLimit` to 1 to send requests sequentially. `CHAIN
 `EXECUTE_COMMAND` operations will always set `concurrencyLimit` to 1 even if user sets a different value.
 10. `delayTime` **:** This parameter indicates the delay time before the first
 iteration starts. This parameter provides a user tool so that parallel operations can be started at a different time. This is necessary for dependent operations, for example, if a chaincode invoke has to start after another chaincode finishes, then the chaincode invoke should be delayed for a period time before its execution. This parameter takes time period in seconds as its value. For example, `delayTime: 60s`, this means that the operation should wait 60 seconds before its first execution.
-
+11. `waitUntilFinish` **:** true(default value) or false, this parameter indicates whether wait the taske end.
+12. `hostaliases` **:**  This is not necessary, just used for hostname used private URL
+       ip: xx.xx.xx.xx
+       hostname1~10: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
 #### CHANNEL_CREATE
 ```yaml
   - name: "create-channel"
