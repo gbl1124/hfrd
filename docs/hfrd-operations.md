@@ -69,6 +69,10 @@ iteration starts. This parameter provides a user tool so that parallel operation
     iterationInterval: 0s
     loadSpread: 1
     ignoreErrors: false
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       applicationCapability: V1_4
       connectionProfile: orga
@@ -89,6 +93,10 @@ You can also use `channelNameList` instead of `channelNamePrefix` and `prefixOff
     iterationInterval: 0s
     loadSpread: 1
     ignoreErrors: false
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       applicationCapability: V1_4
       connectionProfile: orga
@@ -117,6 +125,10 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
     iterationCount: 10
     iterationInterval: 1s
     loadSpread: 1
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: orga
       channelNamePrefix: "mychannel"
@@ -133,6 +145,10 @@ You can also use `channelNameList` instead of `channelNamePrefix` and `prefixOff
     iterationCount: 1
     iterationInterval: 1s
     loadSpread: 1
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: orga
       channelNameList: mychannel0,mychannel2,mychannel5,mychannel11
@@ -157,6 +173,10 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
     iterationCount: 10
     iterationInterval: 1s
     loadSpread: 1
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: orga
       channelName: "mychannel"
@@ -175,6 +195,10 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
     iterationCount: 10
     iterationInterval: 1s
     loadSpread: 1
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: orga
       channelNamePrefix: "mychannel"
@@ -215,6 +239,10 @@ Same like `CHANNEL_JOIN`.
     iterationCount: 10
     iterationInterval: 1s
     loadSpread: 1
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: orga
       chaincodeNamePrefix: "mysamplecc-"
@@ -244,6 +272,10 @@ When the `lang` is set as `cds`, you need to set the path as the cds file path.
     iterationCount: 1
     iterationInterval: 1s
     loadSpread: 1
+    hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
     parameters:
       connectionProfile: orga
       chaincodeName: "mysamplecc"
@@ -272,6 +304,10 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
    iterationCount: 100
    iterationInterval: 2r
    loadSpread: 5
+   hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
    parameters:
       connectionProfile: orga
       channelName: "mychannel0"
@@ -323,6 +359,10 @@ test modules support 1.1, 1.2, 1.3 and 1.4
    iterationCount: 100
    iterationInterval: 2r
    loadSpread: 5
+   hostaliases:
+      ip: "xx.xx.xx.xx"
+      hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+      hostname2: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
    parameters:
       connectionProfile: orga
       channelName: "mychannel0"
