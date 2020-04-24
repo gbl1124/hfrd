@@ -1,0 +1,215 @@
+# Copyright IBM Corp. All Rights Reserved.
+################################################################################
+#
+#   Description: This is template for
+#     CHANNEL_CREATE:  create channel.
+#     CHANNEL_JOIN:   join specified peers into channel.
+#     CHANNEL_QUERY:  query channel configuration
+#     CHAINCODE_INSTALL: install chaincode to specified peers.
+#     CHAINCODE_INSTANTIATE: instantiate chaincode to specified peers
+#     CHAINCODE_INVOKE: send traffic to fabric networks
+################################################################################
+
+name: "System performance test"
+description: "This test is to create as much chaincode computation load as possible"
+##continueAfterFail : Yes or no to indicates if the test should continue or fail after one test failed
+continueAfterFail: no
+tests:
+   #name: The name of this operation.
+   - name: "create-channel"
+     #operation : The operation name of this section.
+       # CHANNEL_CREATE: Used to create channels
+     operation: "CHANNEL_CREATE"
+      # iterationCount:  This parameter indicates the loop count of this operatoin
+      # For example: If iterationCount:
+      # 10 and operation:CHANNEL_CREATE, then hfrd will help you create 10 channels with same channelNamePrefix
+     iterationCount: 5
+      # iterationInterval : The interval between each iteration.
+     iterationInterval: 0s
+      # retryCount: The max retry times if operation fails.
+     retryCount: 10
+      # loadSpread:  HFRD use kubernetes job to run the operations, defines how many kubernetes pods will run this operation in parallel.
+     loadSpread: 1
+      # hostaliases: used for private URL, hostname supports a maximum of 10
+     hostaliases:
+       ip: "9.12.44.56"
+       hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname2: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname3: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname4: "ibp-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+     parameters:
+       #connectionProfile : Specify org name or full path of connection profile here.
+       connectionProfile: /fabric/keyfiles/org1/connection.yml
+       #channelNamePrefix:
+       # Indicate which channel the chaincode will be instantiated in.
+       # For example,if you set the channelNamePrefix:"mychannel-" and iterationCount:10,
+       # then HFRD will help instantiate chaincode in channels mychannel-0 to mychannel-9
+       channelNamePrefix: "channel"
+       #channelConsortium: The channel consortium to be used in channel creation.
+       # In IBP networks, you can use SampleConsotium.In cello networks, you can use FabricConsotium.
+       channelConsortium: "SampleConsortium"
+       #channelOrgs:  The orgs that allowed to join the channels created in this operation.
+       #  For example: channelOrgs: "org1,org2,org3,org4"
+       channelOrgs: "org1"
+       #ordererName: The orderer to be used to create channels.
+       ordererName: ordererorgorderer1
+  # Join org1 peers
+   - name: "join-org1-peers-to-channel"
+     #operation : The operation name of this section.
+     # CHANNEL_JOIN:  Used to join specified peers into channels
+     operation: "CHANNEL_JOIN"
+     # iterationCount: This parameter indicates the loop count of this operatoin
+     iterationCount: 3
+     #iterationInterval: The interval between each iteration
+     iterationInterval: 1s
+     #retryCount: The max retry times if operation fails
+     retryCount: 3
+     #loadSpread: HFRD use kubernetes job to run the operations.
+     #            defines how many kubernetes pods will run this operation in parallel.
+     loadSpread: 1
+     # hostaliases: used for private URL, hostname supports a maximum of 10
+     hostaliases:
+       ip: "9.12.44.56"
+       hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname2: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname3: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname4: "ibp-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+     parameters:
+       #connectionProfile : Specify org name or full path of connection profile here.
+       connectionProfile: /fabric/keyfiles/org1/connection.yml
+       channelNamePrefix: "channel"
+       #peers: The peers that will be used for endorsement or service discovery
+       peers: "org1peer1,org1peer2"
+       #ordererName: The orderer name that you want to use when update channels.
+       ordererName: ordererorgorderer1
+# query-channel       
+   - name: "query-channel"
+     operation: "CHANNEL_QUERY"
+     #iterationCount: This parameter indicates the loop count of this operatoin.
+     iterationCount: 10
+     #iterationInterval: The interval between each iteration.
+     iterationInterval: 1s
+     #retryCount: The max retry times if operation fails.
+     retryCount: 3
+     # HFRD use kubernetes job to run the operations.
+     # loadSpread : defines how many kubernetes pods will run this operation in parallel.
+     loadSpread: 1
+     # hostaliases: used for private URL, hostname supports a maximum of 10
+     hostaliases:
+       ip: "9.12.44.56"
+       hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname2: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname3: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname4: "ibp-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+     parameters:
+       connectionProfile: /fabric/keyfiles/org1/connection.yml
+       #channelName: The channel name that transactions will be invoked on.
+       channelName: "channel0"
+       #peers: The peers that will be used for endorsement or service discovery.
+       peers: "org1peer1,org1peer2"
+ # install-chaincode      
+   - name: "install-chaincode"
+     operation: "CHAINCODE_INSTALL"
+     #iterationCount: This parameter indicates the loop count of this operatoin.
+     iterationCount: 2
+     #iterationInterval: The interval between each iteration.
+     iterationInterval: 1s
+     # retryCount: The max retry times if operation fails.
+     retryCount: 3
+     # loadSpread:  HFRD use kubernetes job to run the operations, defines how many kubernetes pods will run this operation in parallel.
+     loadSpread: 1
+     # hostaliases: used for private URL, hostname supports a maximum of 10
+     hostaliases:
+       ip: "9.12.44.56"
+       hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname2: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname3: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname4: "ibp-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+     parameters:
+       #connectionProfile : Specify org name or full path of connection profile here.
+       connectionProfile: /fabric/keyfiles/org1/connection.yml
+       #chaincodeNamePrefix: The prefix of chaincode name:
+       #   For example, if you set the chaincodeNamePrefix:"samplecc-" and iterationCount:10,
+       #   then HFRD will help install chaincodes from mysamplecc-0 to mysamplecc-9 to the specified peers
+       chaincodeNamePrefix: "samplecc-"
+       #chaincodeVersion: The chaincode version
+       chaincodeVersion: "v1"
+       path: "chaincode/samplecc" # cc src code path relative to $GOPATH
+       #peers: The peers that will be used for endorsement or service discovery.
+       peers: "org1peer1,org1peer2"
+   # Query channel configurations: batchtimeout/batchsize/anchorPeers
+   - name: "instantiate-chaincode"
+     operation: "CHAINCODE_INSTANTIATE"
+     iterationCount: 2
+     iterationInterval: 1s
+     retryCount: 3
+     loadSpread: 1
+     # hostaliases: used for private URL, hostname supports a maximum of 10
+     hostaliases:
+       ip: "9.12.44.56"
+       hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname2: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname3: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname4: "ibp-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+     parameters:
+       #connectionProfile : Specify org name or full path of connection profile here.
+       connectionProfile: /fabric/keyfiles/org1/connection.yml
+       #chaincodeName: The chaincode that will be used.
+       chaincodeName: "samplecc-0"
+       #chaincodeVersion: The chaincode version
+       chaincodeVersion: "v1"
+       path: "chaincode/samplecc"
+       channelNamePrefix : "channel"
+       #peers: The peers that will be used for endorsement or service discovery.
+       peers: "org1peer1,org1peer2"
+   # invoke chaincode  
+   - name: "execute-cc"
+     operation: "CHAINCODE_INVOKE"
+     #iterationCount： This parameter indicates the loop count of this operatoin.
+     # For CHAINCODE_INVOKE,this will be used run 10 minute.
+     iterationCount: 0h10m0s
+     #iterationInterval: The interval between each iteration.
+     iterationInterval: 0s
+     #retryCount: The max retry times if operation fails
+     retryCount: 3
+     loadSpread: 1
+     #waitUntilFinsh: true(default) or false, this parameter indicates whether need wait operation end
+     waitUntilFinish: true
+     hostaliases:
+       ip: "9.12.44.56"
+       hostname1: "ibp-org1peer1-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname2: "ibp-org1peer2-peer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname3: "ibp-ordererorgorderernode1-orderer.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+       hostname4: "ibp-org1ca-ca.apps.ibp-perf-zvm.openshift.zpa.ibm.com"
+     parameters:
+       #connectionProfile : Specify org name or full path of connection profile here.
+       connectionProfile: /fabric/keyfiles/org1/connection.yml
+       #channelName: The channel name that transactions will be invoked on.
+       channelName: "channel0"
+       #chaincodeName: The chaincode that will be used.
+       chaincodeName: "samplecc-0"
+       #queryOnly: true or false
+       #         If queryOnly:true,the operation will only query the ledger
+       #         If queryOnly:false,the operation will invoke chaincode and make ledger commits.
+       queryOnly: false
+       #peers: The peers that will be used for endorsement or service discovery
+       peers: "org1peer1,org1peer2"
+       #chaincodeParams: The chaincode parameters to be used when invoke chaincode.
+       chaincodeParams:
+         - type: "literal"
+           value: "invoke"
+         - type: "literal"
+           value: "put"
+         - type: "sequentialString"
+           value: "a*"
+         - type: payloadRange
+           min: "128"
+           max: "128"
+       #loglevel: setting log level of test modules. Currently supporting DEBUG, INFO and ERROR, all case insensitive.
+       logLevel: ERROR
+       #serviceDiscovery: default to false.
+       #     When set to true, 'cc invoke' module will do service discovery with the first peer in peers list to discover a peer group to send proposal to.
+       serviceDiscovery: false
+       #concurrencyLimit:  setting test module sending requests concurrency limit.
+       # If user sets concurrencyLimit to 3000, test modules will start AT MOST 3000 goroutines to send requests.
+       concurrencyLimit: 3000
