@@ -12,9 +12,10 @@
 
 name: "System performance test"
 description: "This test is to create as much chaincode computation load as possible"
-##continueAfterFail : Yes or no to indicates if the test should continue or fail after one test failed
+#continueAfterFail : Yes or no to indicates if the test should continue or fail after one test failed
 continueAfterFail: no
 tests:
+  # Create channel
    #name: The name of this operation.
    - name: "create-channel"
      #operation : The operation name of this section.
@@ -53,7 +54,7 @@ tests:
        channelOrgs: "org1"
        #ordererName: The orderer to be used to create channels.
        ordererName: ordererorgorderer1
-  # Join org1 peers
+ # Join org1 peers
    - name: "join-org1-peers-to-channel"
      #operation : The operation name of this section.
      # CHANNEL_JOIN:  Used to join specified peers into channels
@@ -141,7 +142,7 @@ tests:
        path: "chaincode/samplecc" # cc src code path relative to $GOPATH
        #peers: The peers that will be used for endorsement or service discovery.
        peers: "org1peer1,org1peer2"
-   # Query channel configurations: batchtimeout/batchsize/anchorPeers
+ # instantiate chaincode
    - name: "instantiate-chaincode"
      #operation : The operation name of this section.
      #CHAINCODE_INSTANTIATE: Used to instantiate chaincode to specified peers
@@ -172,7 +173,7 @@ tests:
        channelNamePrefix : "channel"
        #peers: The peers that will be used for endorsement or service discovery.
        peers: "org1peer1,org1peer2"
-   # invoke chaincode  
+ # invoke chaincode
    - name: "execute-cc"
      #operation : The operation name of this section.
      #CHAINCODE_INVOKE: Used to send traffic to fabric networks
