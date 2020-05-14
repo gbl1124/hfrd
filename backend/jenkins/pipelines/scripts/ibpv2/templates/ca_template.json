@@ -1,6 +1,9 @@
-{   "url": "",
-    "caName": "",
-    "tlsCACerts":{
-        "pem": ""
+{   "caName": "",
+    "enroll_id": "",
+    "enroll_secret": "",
+    "hsm":{
+        "pkcs11endpoint": "",
+        "hsm_label": "",
+        "hsm_pin": ""
     }
 }

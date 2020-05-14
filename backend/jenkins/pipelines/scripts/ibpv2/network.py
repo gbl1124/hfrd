@@ -55,7 +55,7 @@ peerorg_names = []
 
 def create_organization(config, networkspec,org_name, node_type):
     print 'create ca,msp for organization: ' + org_name
-    node.create_ca(org_name, config)
+    node.create_ca(org_name, config,networkspec)
     time.sleep(50)
     node.query_ca(org_name, config)
     print 'create msp for organization: ' + org_name

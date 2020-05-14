@@ -10,9 +10,20 @@ import subprocess
 requests.packages.urllib3.disable_warnings()
 
 
-def create_ca(org_name, config):
+def create_ca(org_name, config, networkspec):
+    work_dir = config.get('Initiate', 'Work_Dir')
     create_ca_url = config.get('Initiate', 'Console_Url') + config.get('Components', 'CA')
-    payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
+    if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
+       payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
+    else:
+        payload = utils.loadJsonContent(work_dir + '/templates/ca_template.json')
+        payload['display_name'] = org_name + 'ca'
+        payload['enroll_id'] = 'admin'
+        payload['enroll_secret'] = 'pass4chain'
+        payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
+        payload['hsm']['hsm_label'] = networkspec['resources']['hsm']['hsm_label']
+        payload['hsm']['hsm_pin'] = networkspec['resources']['hsm']['hsm_pin']
+    #
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
 
@@ -69,7 +80,13 @@ def create_peer(config,networkspec, org_name, peer_name):
     peer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
                                 peer_admin.read(), ca_tls_admin.read(), 'admin', 'peertls')
-    peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template.json')
+    if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
+        peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template.json')
+    else:
+        peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template_hsm.json')
+        peer_payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
+        peer_payload['hsm']['hsm_label'] = networkspec['resources']['hsm']['hsm_label']
+        peer_payload['hsm']['hsm_pin'] = networkspec['resources']['hsm']['hsm_pin']
     peer_payload['msp_id'] = org_name
     peer_payload['state_db'] = 'couchdb'
     #peer_payload['type'] = 'fabric-peer'
