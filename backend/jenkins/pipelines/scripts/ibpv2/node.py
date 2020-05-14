@@ -83,6 +83,8 @@ def create_peer(config,networkspec, org_name, peer_name):
     else:
         peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template_hsm.json')
         peer_payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
+        peer_payload['hsm']['hsm_label'] =  networkspec['resources']['hsm']['hsm_label']
+        peer_payload['hsm']['hsm_pin'] =  networkspec['resources']['hsm']['hsm_pin']
     peer_payload['msp_id'] = org_name
     peer_payload['state_db'] = 'couchdb'
     #peer_payload['type'] = 'fabric-peer'
