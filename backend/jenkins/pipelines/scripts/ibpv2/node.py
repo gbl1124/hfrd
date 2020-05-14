@@ -13,14 +13,14 @@ requests.packages.urllib3.disable_warnings()
 def create_ca(org_name, config, networkspec):
     work_dir = config.get('Initiate', 'Work_Dir')
     create_ca_url = config.get('Initiate', 'Console_Url') + config.get('Components', 'CA')
-    if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
-       payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
-    else:
-        payload = utils.loadJsonContent(work_dir + '/templates/ca_template.json')
-        payload['display_name'] = org_name + 'ca'
-        payload['enroll_id'] = 'admin'
-        payload['enroll_secret'] = 'pass4chain'
-        payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
+    #if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
+    #   payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
+    #else:
+    payload = utils.loadJsonContent(work_dir + '/templates/ca_template_hsm.json')
+    payload['display_name'] = org_name + 'ca'
+    payload['enroll_id'] = 'admin'
+    payload['enroll_secret'] = 'pass4chain'
+    payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
     #
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
