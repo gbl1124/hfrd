@@ -34,5 +34,22 @@
                 "memory": "256M"
             }
         }
+    },
+    "config_override":{
+        "peer":{
+            "bccsp":{
+                "default": "PKCS11",
+                "pkcs11": {
+                    "security": 256,
+                    "hash": "SHA2",
+                    "library": "/usr/local/lib/libpkcs11-proxy.so",
+                    "label": "CEX6P",
+                    "pin": "98765432",
+                    "filekeystore": {
+                        "keystore": "msp/keystore"
+                    }
+                }
+            }
+        }
     }
 }

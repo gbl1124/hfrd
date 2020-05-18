@@ -22,7 +22,7 @@ def create_ca(org_name, config, networkspec):
     payload['enroll_secret'] = 'pass4chain'
     payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
     payload['hsm']['hsm_label'] = networkspec['resources']['hsm']['hsm_label']
-    payload['hsm']['hsm_pin'] = networkspec['resources']['hsm_pin']
+    payload['hsm']['hsm_pin'] = networkspec['resources']['hsm']['hsm_pin']
     #
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
