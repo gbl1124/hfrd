@@ -21,8 +21,8 @@ def create_ca(org_name, config, networkspec):
     payload['enroll_id'] = 'admin'
     payload['enroll_secret'] = 'pass4chain'
     payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
-    payload['hsm']['hsm_label'] = networkspec['resources']['hsm']['hsm_label']
-    payload['hsm']['hsm_pin'] = networkspec['resources']['hsm']['hsm_pin']
+    payload['config_override']['ca']['bccsp']['pkcs11']['label'] = networkspec['resources']['hsm']['hsm_label']
+    payload['config_override']['ca']['bccsp']['pkcs11']['pin'] = networkspec['resources']['hsm']['hsm_pin']
     #
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
@@ -85,8 +85,8 @@ def create_peer(config,networkspec, org_name, peer_name):
     else:
         peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template_hsm.json')
         peer_payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
-        peer_payload['hsm']['hsm_label'] =  networkspec['resources']['hsm']['hsm_label']
-        peer_payload['hsm']['hsm_pin'] =  networkspec['resources']['hsm']['hsm_pin']
+        peer_payload['config_override']['peer']['bccsp']['pkcs11']['label'] = networkspec['resources']['hsm']['hsm_label']
+        peer_payload['config_override']['peer']['bccsp']['pkcs11']['pin'] = networkspec['resources']['hsm']['hsm_pin']
     peer_payload['msp_id'] = org_name
     peer_payload['state_db'] = 'couchdb'
     #peer_payload['type'] = 'fabric-peer'

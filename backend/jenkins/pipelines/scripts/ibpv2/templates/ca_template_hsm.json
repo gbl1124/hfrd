@@ -37,8 +37,6 @@
         }
     },
     "hsm":{
-        "pkcs11endpoint": "",
-        "hsm_label": "",
-        "hsm_pin": ""
+        "pkcs11endpoint": ""
     }
 }
