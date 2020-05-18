@@ -24,6 +24,8 @@
         }
     },
     "hsm":{
-        "pkcs11endpoint": ""
+        "pkcs11endpoint": "",
+        "hsm_label": "",
+        "hsm_pin": ""
     }
 }
