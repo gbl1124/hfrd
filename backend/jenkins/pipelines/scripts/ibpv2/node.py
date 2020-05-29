@@ -13,20 +13,7 @@ requests.packages.urllib3.disable_warnings()
 def create_ca(org_name, config, networkspec):
     work_dir = config.get('Initiate', 'Work_Dir')
     create_ca_url = config.get('Initiate', 'Console_Url') + config.get('Components', 'CA')
-    #if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
-    #   payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
-    #else:
-    if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
-        payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
-    else:
-        payload = utils.loadJsonContent(work_dir + '/templates/ca_template_hsm.json')
-        payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
-        payload['config_override']['ca']['bccsp']['pkcs11']['label'] = networkspec['resources']['hsm']['hsm_label']
-        payload['config_override']['ca']['bccsp']['pkcs11']['pin'] = networkspec['resources']['hsm']['hsm_pin']
-        payload['display_name'] = org_name + 'ca'
-        payload['enroll_id'] = 'admin'
-        payload['enroll_secret'] = 'pass4chain'
-    #
+    payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
 
@@ -83,13 +70,7 @@ def create_peer(config,networkspec, org_name, peer_name):
     peer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
                                 peer_admin.read(), ca_tls_admin.read(), 'admin', 'peertls')
-    if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
-        peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template.json')
-    else:
-        peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template_hsm.json')
-        peer_payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
-        peer_payload['config_override']['peer']['bccsp']['pkcs11']['label'] = networkspec['resources']['hsm']['hsm_label']
-        peer_payload['config_override']['peer']['bccsp']['pkcs11']['pin'] = networkspec['resources']['hsm']['hsm_pin']
+    peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template.json')
     peer_payload['msp_id'] = org_name
     peer_payload['state_db'] = 'couchdb'
     #peer_payload['type'] = 'fabric-peer'
