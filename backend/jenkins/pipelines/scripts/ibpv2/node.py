@@ -17,7 +17,7 @@ def create_ca(org_name, config, networkspec):
     #   payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
     #else:
     if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
-        payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
+        payload = utils.loadJsonContent(work_dir + '/templates/ca_template_nohsm.json')
     else:
         payload = utils.loadJsonContent(work_dir + '/templates/ca_template_hsm.json')
         payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
