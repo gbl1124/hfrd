@@ -17,15 +17,15 @@ def create_ca(org_name, config, networkspec):
     #   payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
     #else:
     if networkspec['resources']['hsm']['pkcs11endpoint'] == '':
-        payload = utils.loadJsonContent(work_dir + '/templates/ca_template_nohsm.json')
+        payload = { 'display_name': org_name + 'ca', 'enroll_id': 'admin', 'enroll_secret': 'pass4chain' }
     else:
         payload = utils.loadJsonContent(work_dir + '/templates/ca_template_hsm.json')
         payload['hsm']['pkcs11endpoint'] = networkspec['resources']['hsm']['pkcs11endpoint']
         payload['config_override']['ca']['bccsp']['pkcs11']['label'] = networkspec['resources']['hsm']['hsm_label']
         payload['config_override']['ca']['bccsp']['pkcs11']['pin'] = networkspec['resources']['hsm']['hsm_pin']
-    payload['display_name'] = org_name + 'ca'
-    payload['enroll_id'] = 'admin'
-    payload['enroll_secret'] = 'pass4chain'
+        payload['display_name'] = org_name + 'ca'
+        payload['enroll_id'] = 'admin'
+        payload['enroll_secret'] = 'pass4chain'
     #
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
