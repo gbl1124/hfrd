@@ -29,7 +29,7 @@ spec:
     ports:
     - containerPort: 9091
   - name: grafana
-    image: grafana/grafana:latest
+    image: grafana/grafana:6.7.0
     imagePullPolicy: IfNotPresent
     env:
     - { name: "GF_AUTH_ANONYMOUS_ENABLED", value: "True" }
