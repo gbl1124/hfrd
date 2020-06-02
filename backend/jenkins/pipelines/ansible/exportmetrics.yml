@@ -10,7 +10,7 @@
 
 - name: Export metrics data
   uri:
-    url: "http://{{ nodeIP.stdout }}:{{ prometheusNodePort.stdout }}/api/v1/query_range?query={{ metricsitem }}&start={{ startTime_tests.stdout }}&end={{ endTime_tests.stdout }}&step={{ metrics_step.stdout }}s"
+    url: "http://{{ nodeIP.stdout }}:{{ prometheusNodePort.stdout }}/api/v1/query_range?query={{ metricsitem }}&start={{ startTime_tests.stdout }}&end={{ endTime_tests.stdout }}&step=15s"
     dest: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/metrics/{{ metricsitem }}.json"
   loop: "{{ metrics }}"
   loop_control:
