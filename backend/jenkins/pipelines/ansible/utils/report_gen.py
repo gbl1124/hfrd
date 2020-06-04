@@ -27,19 +27,30 @@ summary_output.write('"Test Summary Report for test", ' + reqId +"\n")
 #summary_output.write("Note: Time is in milliseconds." + "\n")
 
 
-def generateAverageMetrics(metrics_name_index, metrics, summary_output):
+def generateAverageMetrics(metrics_name_index, metrics, summary_output,inter_s,inter_e):
     summary = 0.0
     avg_val = 0.0
     for index, item in enumerate(metrics):
-        if len(metrics) < 3:
-            summary += float(item[1])
-        else:
-            if index != 0 and index != len(metrics) - 1:
+        if inter_e < 1 :
+            if len(metrics) < 3:
                 summary += float(item[1])
-    if len(metrics) > 0 and len(metrics) <= 2:
-        avg_val = summary/len(metrics)
-    elif len(metrics) > 2:
-        avg_val = summary/(len(metrics)-2)
+            else:
+                if index != 0 and index != len(metrics) - 1:
+                    summary += float(item[1])
+        else:
+            if index >= inter_s and  index <= inter_e:
+                summary += float(item[1])
+    if inter_e < 1 :
+        if len(metrics) > 0 and len(metrics) <= 2:
+            avg_val = summary/len(metrics)
+        elif len(metrics) > 2:
+            avg_val = summary/(len(metrics)-2)
+    else:
+        if len(metrics) - 1 < inter_e:
+            avg_val = summary/(len(metrics) - inter_s + 1)
+        else:
+            avg_val = summary/(inter_e - inter_s + 1)
+
     summary_output.write(
         metrics_description[metrics_name_index] + str(avg_val) + "\n")
 
@@ -58,7 +69,8 @@ def generateMinMetrics(metrics_name_index, metrics, summary_output):
         value_list.append(float(item[1]))
     summary_output.write(
         metrics_description[metrics_name_index] + str(min(value_list)) + "\n")
-
+inter_s = 0
+inter_e = 0
 # generate target TPS
 try:
     testplan = open(metrics_dir+"/../testplan.yml", "r")
@@ -70,6 +82,15 @@ try:
     for idx, test in enumerate(ty['tests']):
         try:
             if test['operation'] == 'CHAINCODE_INVOKE':
+
+                if 'intervalNum' not in test:
+                    inter_s = 0
+                    inter_e = 0
+                else:
+                    intervals_numer = 0
+                    iterationCount = test['intervalNum']
+                    inter_s = int(iterationCount.split("-")[0])
+                    inter_e = int(iterationCount.split("-")[1])
                 if 'iterationInterval' not in test:
                     iterationInterval = '1s'
                 else:
@@ -106,7 +127,7 @@ for metrics_name_index, metrics_name in enumerate(metrics_names):
                     if metrics_type == "max":
                         generateMaxMetrics(metrics_name_index, metrics, summary_output)
                     elif metrics_type == "avg":
-                        generateAverageMetrics(metrics_name_index,metrics,summary_output)
+                        generateAverageMetrics(metrics_name_index,metrics,summary_output,inter_s,inter_e)
                     elif metrics_type == "min":
                         generateMinMetrics(metrics_name_index, metrics, summary_output)
             except Exception as e:

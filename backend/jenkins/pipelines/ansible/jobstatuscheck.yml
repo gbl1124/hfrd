@@ -3,7 +3,7 @@
 
 - name: Query test "{{ jobitem.name }}" status
   command: >-
-    kubectl --kubeconfig {{ kubepath }} get --no-headers
+    kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}  get --no-headers
     -o=custom-columns=S:.status.succeeded,F:.status.failed
     job job-{{ req_id }}-{{ jobitem.idx }}
   register: jobStatus
@@ -26,7 +26,7 @@
 
 - name: Get all pod names that belong to job
   shell:
-    kubectl --kubeconfig {{ kubepath }}
+    kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
     get pods | grep job-{{ req_id }}-{{ jobitem.idx }} | awk '{print $1}'
   register: pod_names_output
 
@@ -38,7 +38,7 @@
 
 - name: Get pod logs when there is an error
   shell:
-    kubectl --kubeconfig {{ kubepath }}
+    kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
     logs --tail 100 {{ item }} > {{ contentrepo }}/{{ uid }}/{{ req_id }}/logs/{{ item }}.out
   with_items:
     - "{{ pod_names_output.stdout_lines }}"

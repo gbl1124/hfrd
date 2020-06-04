@@ -125,7 +125,7 @@
 - name: Run test "{{ testitem.name }}"
   command: >-
     kubectl --kubeconfig {{ kubepath }} apply
-    -f {{ work_dir }}/job{{ my_idx }}.yml
+    -f {{ work_dir }}/job{{ my_idx }}.yml -n {{ namespace }}
 
 - name: adding to parallel job list
   set_fact:
