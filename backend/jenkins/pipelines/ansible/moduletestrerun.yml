@@ -70,15 +70,28 @@
         replace: "={{ req_id }}"
         backup: no
 
+    - name: Load test plan
+      include_vars:
+        file: "{{ work_dir }}/testplan.yml"
+
+    - name: load default name space
+      set_fact:
+        namespace: "default"
+      when: namespace|string == "<class 'jinja2.utils.Namespace'>"
+
+    - name: Display name space
+      debug:
+        msg: "{{ namespace }}"
+
     - name: Get k8s node external IP
       command: >-
-        kubectl --kubeconfig {{ kubepath }}
+        kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
         get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="ExternalIP")].address }'
       register: nodeIP
 
     - name: Get k8s node internal ip when external ip is empty
       command: >-
-        kubectl --kubeconfig {{ kubepath }}
+        kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
         get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="InternalIP")].address }'
       register: nodeInternalIP
       failed_when: nodeInternalIP.stdout == ""
@@ -110,31 +123,27 @@
         - "chartpath"
         - "metricserviceid"
 
-    - name: Load test plan
-      include_vars:
-        file: "{{ work_dir }}/testplan.yml"
-
     - name: Load metric service id
       set_fact:
         metricserviceid: "{{ lookup('file', work_dir+'/metricserviceid') }}"
 
     - name: Get grafana dashboard node port
       command: >-
-        kubectl --kubeconfig {{ kubepath }}
+        kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
         get service monitor-service-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="grafana")].nodePort}'
       register: grafanaNodePort
       failed_when: grafanaNodePort.stdout == ""
 
     - name: Get grafana-reporter node port
       command: >-
-        kubectl --kubeconfig {{ kubepath }}
+        kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
         get service monitor-service-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="grafana-reporter")].nodePort}'
       register: reporterNodePort
       failed_when: reporterNodePort.stdout == ""
 
     - name: Get prometheus node port
       command: >-
-        kubectl --kubeconfig {{ kubepath }}
+        kubectl --kubeconfig {{ kubepath }} -n {{ namespace }}
         get service monitor-service-int-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="prometheus")].nodePort}'
       register: prometheusNodePort
       failed_when: prometheusNodePort.stdout == ""
@@ -179,7 +188,7 @@
 
     - name: Remove all the jobs
       command: >-
-        kubectl --kubeconfig {{ kubepath }} delete
+        kubectl --kubeconfig {{ kubepath }} delete -n {{ namespace }}
         -f {{ item.path }}
       with_items: "{{ deployfiles.files }}"
       when: status_flag == "Success"

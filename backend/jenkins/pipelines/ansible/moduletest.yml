@@ -49,6 +49,11 @@
       include_vars:
         file: "{{ work_dir }}/testplan.yml"
 
+    - name: load default name space
+      set_fact:
+        namespace: "default"
+      when: namespace|string == "<class 'jinja2.utils.Namespace'>"
+
     - name: Display name space
       debug:
         msg: "{{ namespace }}"
