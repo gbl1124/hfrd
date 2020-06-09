@@ -1,3 +1,6 @@
+# 1.0.6 (2020-06-09)
+### Fix Bug
+* ** alpine version: change alpine verfion from latest to 3.9.5 which support python2.
 
 # 1.0.5 (2020-06-08)
 ### New future
