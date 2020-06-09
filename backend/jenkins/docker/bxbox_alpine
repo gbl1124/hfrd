@@ -10,7 +10,7 @@
 # To exec a bash script:
 #    docker exec -it bxbox /path/bash-script.sh
 #
-FROM alpine
+FROM alpine:3.9.5
 
 ARG user=ubuntu
 ARG uid=1000
