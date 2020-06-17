@@ -273,6 +273,12 @@
         -- tar -C /fabric/src -xzf /chaincode/chaincode.tgz
       when: chaincodetgz.stat.exists
 
+    - include_tasks: preruntest.yml
+      loop: "{{ tests }}"
+      loop_control:
+        loop_var: testitem
+        index_var: my_idx
+
     - name: Record the start time of tests
       shell:
         date +%s

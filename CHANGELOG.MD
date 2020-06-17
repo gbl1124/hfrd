@@ -1,3 +1,7 @@
+# 1.0.7 (2020-06-17)
+### New future : reduce delay for multiple run
+* ** add preruntest.yml and move prepare task into preruntest.yml to reduce delay time.
+
 # 1.0.6 (2020-06-09)
 ### Fix Bug
 * ** alpine version: change alpine verfion from latest to 3.9.5 which support python2.

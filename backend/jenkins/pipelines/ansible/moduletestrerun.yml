@@ -148,6 +148,12 @@
       register: prometheusNodePort
       failed_when: prometheusNodePort.stdout == ""
 
+    - include_tasks: preruntest.yml
+      loop: "{{ tests }}"
+      loop_control:
+        loop_var: testitem
+        index_var: my_idx
+
     - name: Record the start time of tests
       shell:
         date +%s
