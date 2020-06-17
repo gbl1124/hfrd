@@ -1,5 +1,5 @@
 - debug:
-    msg: "outer item={{ testitem }}"
+    msg: "outer item={{ testitem }} "
 
 - name: Init chaincode param variables
   set_fact:
