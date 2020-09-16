@@ -1,3 +1,7 @@
+# 1.1.0 (2020-09-16)
+### New future : Support IBP V2.5 create network
+* ** update peer config file, node.js and support 1.4.7-1
+.
 # 1.0.7 (2020-06-17)
 ### New future : reduce delay for multiple run
 * ** add preruntest.yml and move prepare task into preruntest.yml to reduce delay time.

@@ -4,6 +4,7 @@
     "state_db": "",
     "config": {
     },
+    "version": "1.4.7-1",
     "resources": {
         "peer":{
             "requests": {

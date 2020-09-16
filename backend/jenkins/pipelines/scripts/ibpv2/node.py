@@ -50,8 +50,22 @@ def create_msp(org_name, node_type ,config,networkspec):
     admin = open(work_dir + '/crypto-config/' + org_name + '/admin_cert', 'r')
     root_certs = open(work_dir + '/crypto-config/' + org_name + '/root_cert', 'r')
     tls_root_certs = open(work_dir + '/crypto-config/' + org_name + '/tls_root_cert', 'r')
-    msp_data = {'msp_id':org_name, 'display_name': org_name, 'root_certs': [root_certs.read()],
-            'admins':[admin.read()], 'tls_root_certs':[tls_root_certs.read()]}
+    # msp_data = {'msp_id':org_name, 'display_name': org_name, 'root_certs': [root_certs.read()],
+    #        'admins':[admin.read()], 'tls_root_certs':[tls_root_certs.read()]}
+
+    root_certs_string = root_certs.read()
+    msp_data = utils.loadJsonContent(work_dir + '/templates/msp_template.json')
+    msp_data['msp_id'] = org_name
+    msp_data['display_name'] = org_name
+    msp_data['root_certs'] = [root_certs.read()]
+    msp_data['admins'] = [admin.read()]
+    msp_data['tls_root_certs'] = [tls_root_certs.read()]
+    #IBP V2.5
+    msp_data['fabric_node_ous']['admin_ou_identifier']['certificate'] = root_certs_string
+    msp_data['fabric_node_ous']['client_ou_identifier']['certificate'] = root_certs_string
+    msp_data['fabric_node_ous']['orderer_ou_identifier']['certificate'] = root_certs_string
+    msp_data['fabric_node_ous']['peer_ou_identifier']['certificate'] = root_certs_string
+    #IBP V2.5
     print msp_data
     with open(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'msp.json', 'w') as outfile:
                 json.dump(msp_data, outfile)
@@ -69,7 +83,7 @@ def create_peer(config,networkspec, org_name, peer_name):
     ca_tls_admin = open(work_dir + '/crypto-config/' + org_name + '/ca_cert', 'r')
     peer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + org_name + '/' + org_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
-                                peer_admin.read(), ca_tls_admin.read(), 'admin', 'peertls')
+                                peer_admin.read(), ca_tls_admin.read(), 'peer1', 'peertls')
     peer_payload = utils.loadJsonContent(work_dir + '/templates/peer_config_template.json')
     peer_payload['msp_id'] = org_name
     peer_payload['state_db'] = 'couchdb'
@@ -103,13 +117,13 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
     orderer_payload['display_name'] = service_name + '-orderer'
     orderer_payload['resources']['orderer']['requests']['cpu'] = networkspec['resources']['orderer']['cpu_req']
     orderer_payload['resources']['orderer']['requests']['memory'] = networkspec['resources']['orderer']['mem_req']
-
+    #
+    orderer_admin = open(work_dir + '/crypto-config/' + service_name + '/admin_cert', 'r')
+    ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_cert', 'r')
     while(num_of_orderers > 0):
-        orderer_admin = open(work_dir + '/crypto-config/' + service_name + '/admin_cert', 'r')
-        ca_tls_admin = open(work_dir + '/crypto-config/' + service_name + '/ca_cert', 'r')
         orderer_config = utils.constructConfigObject(work_dir + '/crypto-config/' + service_name + '/' + service_name + 'ca.json',
                                 work_dir + '/templates/config_template.json' ,
-                                orderer_admin.read(), ca_tls_admin.read(), 'orderadmin', 'peertls')
+                                orderer_admin.read(), ca_tls_admin.read(), 'orderer', 'peertls')
         orderer_payload['config'].append(orderer_config)
         num_of_orderers -=  1
     utils.sendPostRequest(create_orderer_url, orderer_payload,
