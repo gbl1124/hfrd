@@ -17,7 +17,6 @@ def create_ca(org_name, config, networkspec):
     utils.sendPostRequest(create_ca_url, payload, config.get('Initiate', 'Api_Key'), config.get('Initiate', 'Api_Secret'))
     print 'successfully created ca for organization ' + org_name
 
-
 def query_ca(org_name, config):
     work_dir = config.get('Initiate', 'Work_Dir')
     all_components = requests.get(config.get('Initiate', 'Console_Url') + config.get('Components', 'All_Components'),

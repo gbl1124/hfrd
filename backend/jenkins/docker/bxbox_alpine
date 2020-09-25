@@ -25,8 +25,6 @@ RUN set -eux; \
     && cd /var/cache/apk && tar -xf /var/cache/apk/bx.tar.gz \
     && chmod 755 /var/cache/apk/Bluemix_CLI/install_bluemix_cli \
     && /var/cache/apk/Bluemix_CLI/install_bluemix_cli \
-    && wget https://github.com/hyperledger/fabric-ca/releases/download/v1.4.6/hyperledger-fabric-ca-linux-amd64-1.4.6.tar.gz \
-    && tar -xzf hyperledger-fabric-ca-linux-amd64-1.4.6.tar.gz \
    	&& mv bin/fabric-ca-client /usr/local/bin \
     && mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2 \
     && addgroup -g ${gid} ${user} \
@@ -34,6 +32,8 @@ RUN set -eux; \
     && mkdir -p /opt/fabrictest/output /opt/src  /opt/hfrd/contentRepo \
     && rm -rf /var/cache/apk/*
 
+ADD bin/ /usr/local/bin
+ADD config/ /opt/src/scripts/ibpv2/config
 ADD pipelines /opt/src
 RUN chown -R ${uid}:${gid} /opt/src /opt/fabrictest /opt/hfrd/contentRepo
 ENV HOME /opt/fabrictest
