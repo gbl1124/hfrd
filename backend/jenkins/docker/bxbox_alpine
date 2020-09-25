@@ -15,24 +15,19 @@ FROM alpine:3.9.5
 ARG user=ubuntu
 ARG uid=1000
 ARG gid=1000
-
+ADD bin/ /usr/local/bin
 RUN set -eux; \
     apk add --no-cache --update bash curl jq python py-pip git openssh coreutils \
     && pip install requests \
     && pip install  pyyaml \
     && pip install configparser \
-    && curl -fsSL -o /var/cache/apk/bx.tar.gz https://clis.ng.bluemix.net/download/bluemix-cli/0.6.6/linux64 \
-    && cd /var/cache/apk && tar -xf /var/cache/apk/bx.tar.gz \
-    && chmod 755 /var/cache/apk/Bluemix_CLI/install_bluemix_cli \
-    && /var/cache/apk/Bluemix_CLI/install_bluemix_cli \
-   	&& mv bin/fabric-ca-client /usr/local/bin \
+    && /usr/local/bin/install_bluemix_cli \
     && mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2 \
     && addgroup -g ${gid} ${user} \
     && adduser -D -u ${uid} -G ${user} ${user} \
     && mkdir -p /opt/fabrictest/output /opt/src  /opt/hfrd/contentRepo \
     && rm -rf /var/cache/apk/*
 
-ADD bin/ /usr/local/bin
 ADD config/ /opt/src/scripts/ibpv2/config
 ADD pipelines /opt/src
 RUN chown -R ${uid}:${gid} /opt/src /opt/fabrictest /opt/hfrd/contentRepo
