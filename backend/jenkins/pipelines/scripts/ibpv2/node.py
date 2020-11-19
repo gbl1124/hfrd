@@ -89,6 +89,7 @@ def create_peer(config,networkspec, org_name, peer_name):
     #peer_payload['type'] = 'fabric-peer'
     peer_payload['display_name'] = peer_name
     peer_payload['config'] = peer_config
+    peer_payload['version'] = networkspec['resources']['fabric']['version']
     peer_payload['resources']['peer']['requests']['cpu'] = networkspec['resources']['peer']['cpu_req']
     peer_payload['resources']['peer']['requests']['memory'] = networkspec['resources']['peer']['mem_req']
     peer_payload['resources']['couchdb']['requests']['cpu'] = networkspec['resources']['couchdb']['cpu_req']
@@ -113,6 +114,7 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
     orderer_payload = utils.loadJsonContent(work_dir + '/templates/orderer_config_template.json')
     orderer_payload['msp_id'] = service_name
     orderer_payload['cluster_name'] = service_name
+    orderer_payload['version'] = networkspec['resources']['fabric']['version']
     orderer_payload['display_name'] = service_name + '-orderer'
     orderer_payload['resources']['orderer']['requests']['cpu'] = networkspec['resources']['orderer']['cpu_req']
     orderer_payload['resources']['orderer']['requests']['memory'] = networkspec['resources']['orderer']['mem_req']
