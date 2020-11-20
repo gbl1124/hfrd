@@ -4,7 +4,7 @@
     "orderer_type": "raft",
     "cluster_name": "",
     "config": [],
-    "version": "1.4.7-1",
+    "version": "2.1.1-1",
     "resources": {
         "orderer": {
             "requests": {
