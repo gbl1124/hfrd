@@ -6,6 +6,12 @@
     },
     "version": "2.1.1-1",
     "resources": {
+        "chaincodelauncher":{
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        },
         "peer":{
             "requests": {
                 "cpu": "1",

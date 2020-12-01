@@ -90,6 +90,8 @@ def create_peer(config,networkspec, org_name, peer_name):
     peer_payload['display_name'] = peer_name
     peer_payload['config'] = peer_config
     peer_payload['version'] = networkspec['resources']['fabric']['version']
+    peer_payload['resources']['chaincodelauncher']['requests']['cpu'] = networkspec['resources']['chaincodelauncher']['cpu_req']
+    peer_payload['resources']['chaincodelauncher']['requests']['memory'] = networkspec['resources']['chaincodelauncher']['mem_req']
     peer_payload['resources']['peer']['requests']['cpu'] = networkspec['resources']['peer']['cpu_req']
     peer_payload['resources']['peer']['requests']['memory'] = networkspec['resources']['peer']['mem_req']
     peer_payload['resources']['couchdb']['requests']['cpu'] = networkspec['resources']['couchdb']['cpu_req']
