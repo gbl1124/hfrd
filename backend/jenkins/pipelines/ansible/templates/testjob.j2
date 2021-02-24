@@ -65,7 +65,7 @@ spec:
 {% endif %}
       containers:
       - name: "con-{{ req_id }}-{{ my_idx }}"
-        image: {{ testitem.container | default('hfrd/gosdk:latest') }}
+        image: {{ testitem.container | default('gbl1125/ibpv2:gosdk') }}
         command: ["{{ cmd_params }}" ]
         imagePullPolicy: Always
         env:
